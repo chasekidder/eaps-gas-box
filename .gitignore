@@ -132,4 +132,5 @@ dmypy.json
 gasbox.code-workspace
 
 # Database Files
-.db
+*.db
+
