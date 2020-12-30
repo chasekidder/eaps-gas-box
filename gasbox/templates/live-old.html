@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}
+Live Data
+{% endblock %}
+
+{% block head %}
+<link href="/css/Chart.min.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block body %}
+
+<script src="/js/Chart.min.js"></script>
+<script src="/js/data_charts.js"></script>
+
+<div class="container-fluid text-center">
+    <h1>Live Data View</h1>
+    <div class="container justify-content-center">
+        
+    <!-- Live Data Chart -->
+    <div class="container" style="width:75%">
+        <div class="row">
+            <div class="col-lg-auto">
+                <canvas id="o2_chart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-lg-auto">
+                <canvas class="col-md-auto" id="co2_chart" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-auto">
+                <canvas id="pressure_chart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/chartjs-plugin-streaming.js"></script>
+
+    <script>
+        var o2_chart_elem = document.getElementById('o2_chart').getContext('2d');
+        var co2_chart_elem = document.getElementById('co2_chart').getContext('2d');
+        var pressure_chart_elem = document.getElementById('pressure_chart').getContext('2d');
+
+        
+        var charts = [
+                    createChart("o2_chart", o2_chart_elem),
+                    createChart("co2_chart", co2_chart_elem),
+                    createChart("pressure_chart", pressure_chart_elem),
+                    ]
+
+        setInterval(function(){getLiveData(charts)}, 1000);
+        
+
+        
+
+    </script>
+
+    
+
+        
+    </div>
+</div>
+{% endblock %}
