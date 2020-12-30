@@ -10,14 +10,14 @@ class Sensor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=False)
 
-class Collection(db.Model):
+class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.DateTime, nullable=False,
         default=datetime.utcnow)
     
     site_id = db.Column(db.Integer, db.ForeignKey("site.id"), nullable=False)
     measurements = db.relationship("Measurement", backref=db.backref(
-        "collection"))
+        "cycle"))
 
 class Measurement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,4 +26,4 @@ class Measurement(db.Model):
     value = db.Column(db.Numeric, nullable=False)
 
     sensor_id = db.Column(db.ForeignKey("sensor.id"))
-    collection_id = db.Column(db.ForeignKey("collection.id"))
+    cycle_id = db.Column(db.ForeignKey("cycle.id"))
