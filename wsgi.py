@@ -1,4 +1,4 @@
-from frontend import app
+from frontend import frontend
 
 if __name__ == "__main__":
     frontend.run()

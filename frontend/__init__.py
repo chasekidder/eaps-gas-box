@@ -1,7 +1,7 @@
 from flask import Flask
 
 # Initialize the app
-app = Flask(__name__, 
+frontend = Flask(__name__, 
             instance_relative_config=True,
             static_folder="static/",
             static_url_path=""
@@ -11,4 +11,4 @@ app = Flask(__name__,
 from frontend import views
 
 # Load the config file
-frontend.config.from_object('config')
+frontend.config.from_object('config.DevConfiguration')
