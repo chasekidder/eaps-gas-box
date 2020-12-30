@@ -2,6 +2,9 @@ from app import models
 from app import db
 
 
+def init_new_db():
+    db.create_all()
+
 def add_measurement(cycle_id, sensor_id, value):
     measurement = models.Measurement(value=value, sensor_id=sensor_id, cycle_id=cycle_id)
     db.session.add(measurement)
@@ -46,3 +49,11 @@ def get_sensor_id_by_name(sensor_name):
 
 
 
+def test_db():
+    #sensor = add_sensor("TestSensor2")
+    #site = add_site("TestSite2")
+    site = get_site_id_by_name("TestSite2")
+    sensor = get_sensor_id_by_name("TestSensor3")
+
+    cycle = add_cycle(site)
+    measurement = add_measurement(cycle.id, sensor, 11111.111)
