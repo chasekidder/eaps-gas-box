@@ -1,3 +1,6 @@
+# To uninstall all pip packages:
+# pip3 uninstall -y $(pip freeze | sed 's;==.*;;g' | tr '\n' ' ')
+
 click==7.1.2
 Flask==1.1.2
 Flask-WTF==0.14.3
