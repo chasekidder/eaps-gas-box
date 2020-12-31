@@ -38,7 +38,6 @@ def collect_data():
 
         for sensor in sensors:
             sensor.record_data(cycle.id, sensor.id)
-            #database.add_measurement(cycle.id, sensor.id, data)
         
         database.commit_all()
         while (time.time() < time_target):

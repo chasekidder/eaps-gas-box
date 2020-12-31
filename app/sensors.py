@@ -34,26 +34,39 @@ class SDI12Sensor(Sensor):
 
     def record_data(self, cycle_id, sensor_id):
         data = self.read()
-        print(data)
         
         if self.teros:
-            values = utils.parse_regex(data, "[+-]")
+            # Seperate TEROS-12 response data into its component elements
+            # BUS_ID[+-]MOISTURE[+-]TEMPERATURE[+-]EC\r\r\n
+            values = utils.parse_regex(data, "([+-])")
+
+            # Remove bus ID element from list
+            values.pop(0)
+
+            # Join pos/neg signs with measures and strip whitespace
+            for index, _ in enumerate(values):
+                values[index:index + 2] = ["".join(values[index:index + 2])
+                    .rstrip()]
+
+            # Cast all the values to the appropriate floats
+            values = [float(value) for value in values]
+
         else:
             print("Not TEROS12?")
-            values = []
+            values = None
 
         if values:
             pass
         else:
             raise ValueError("WTF")
 
-        return
+        # Combine measurement names and values into a single dictionary
+        results = dict(zip(self.measurement_names, values))
 
-        results = {self.measurement_names[i]: values[i] for i 
-            in range(len(self.measurement_names))} 
-
+        # Addd the final measurements to the database
         for result in results:
-            database.add_measurement(cycle_id, sensor_id, result)
+            database.add_measurement(cycle_id, sensor_id, results[result], result)
+            print(f"{result}: {results[result]}")
         
 
     def identify_all_sensors(self):

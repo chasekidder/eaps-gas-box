@@ -38,4 +38,4 @@ def bytes_to_str(data: bytes, encoding: str="utf-8") -> str:
 
 def parse_regex(data: str, pattern: str) -> list:
     print("Data Being Parsed: " + data)
-    return re.split(data, pattern)
+    return re.split(pattern, data)
