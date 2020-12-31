@@ -51,6 +51,6 @@ def api():
 
 @app.route("/test/")
 def test():
-    from app import database
-    database.test_db()
+    from app import data
+    data.collect_data()
     return "Success"
