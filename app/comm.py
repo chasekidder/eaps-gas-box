@@ -11,7 +11,7 @@ class UARTInterface():
         time.sleep(2)
 
     def write(self, data: str):
-        print(data)
+        #print(data)
         self.__write_bytes(utils.str_to_bytes(data))
 
     def read(self) -> str:

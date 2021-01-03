@@ -136,3 +136,8 @@ gasbox.code-workspace
 
 # Pyserial protocol spy output
 spy.txt
+
+# Ignored folders
+docs/
+arduino-src/not_tracked/
+not_tracked/
