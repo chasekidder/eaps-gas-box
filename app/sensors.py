@@ -1,5 +1,3 @@
-from os import RTLD_LAZY
-from typing import Protocol
 from app.views import data
 from app import app
 from app import database
