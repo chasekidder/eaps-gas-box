@@ -24,6 +24,7 @@ class Measurement(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False,
         default=datetime.utcnow)
     value = db.Column(db.Numeric, nullable=False)
+    name = db.Column(db.Text, nullable=False)
 
     sensor_id = db.Column(db.ForeignKey("sensor.id"))
     cycle_id = db.Column(db.ForeignKey("cycle.id"))

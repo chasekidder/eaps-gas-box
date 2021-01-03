@@ -1,6 +1,7 @@
 import os
 import random
 import datetime
+import re
 
 def get_files_in_dir(path:str) -> list:
     return os.listdir(path)
@@ -28,3 +29,12 @@ def get_live_data():
             "Oxygen": random.randint(1,10),
             "Gas Pressure": random.randint(1,10)
             }
+
+def str_to_bytes(data: str) -> bytes:
+    return data.encode()
+
+def bytes_to_str(data: bytes, encoding: str="utf-8") -> str:
+    return data.decode(encoding)
+
+def parse_regex(data: str, pattern: str) -> list:
+    return re.split(pattern, data)
