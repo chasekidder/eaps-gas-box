@@ -53,4 +53,4 @@ def api():
 def test():
     from app import data
     data.collect_data()
-    return "Success"
+    return render_template("test.html")
