@@ -8,39 +8,49 @@ def init_new_db():
 def commit_all():
     db.session.commit()
 
-def add_measurement(cycle_id: int, sensor_id: int, value, measurement_name: str):
-    measurement = models.Measurement(value=value, sensor_id=sensor_id, 
-        cycle_id=cycle_id, name=measurement_name)
-    db.session.add(measurement)
+def add_sample(cycle: int, sensor: int, value, measurement_name: str):
+    sample = models.Sample(value=value, sensor=sensor, 
+        cycle=cycle, name=measurement_name)
+    db.session.add(sample)
     db.session.flush()
-    return measurement
+    return sample
 
-def add_site(site_name: str):
-    site = models.Site(name=site_name)
-    db.session.add(site)
+def add_location(location_name: str):
+    location = models.Location(name=location_name)
+    db.session.add(location)
     db.session.flush()
-    return site
+    return location
     
-def add_sensor(sensor_name: str):
-    sensor = models.Sensor(name=sensor_name)
+def add_sensor(sensor_name: str, protocol: str, measurement_name,
+                    address, command):
+    measurement_name_id = get_measurement_name_id_by_name(measurement_name)
+
+    sensor = models.Sensor(name=sensor_name, protocol=protocol, 
+        measurement_type=measurement_name_id, address=address, command=command)
     db.session.add(sensor)
     db.session.flush()
     return sensor
 
-def add_cycle(site_id: int):
-    cycle = models.Cycle(site_id=site_id)
+def add_cycle(site: int):
+    cycle = models.Cycle(site=site)
     db.session.add(cycle)
     db.session.flush()
     return cycle
 
-def get_site_id_by_name(site_name: str):
-    site = (
-        db.session.query(models.Site)
-        .filter(models.Site.name == site_name).one_or_none()
+def add_measurement_name(measurement_name):
+    measurement_name = models.MeasurementName(name=measurement_name)
+    db.session.add(measurement_name)
+    db.session.flush()
+    return measurement_name
+
+def get_location_id_by_name(location_name: str):
+    location = (
+        db.session.query(models.Location)
+        .filter(models.Location.name == location_name).one_or_none()
     )
 
-    if site is not None:
-        return site.id
+    if location is not None:
+        return location.id
     else:
         return None
 
@@ -55,6 +65,18 @@ def get_sensor_id_by_name(sensor_name: str) -> int or None:
     else:
         return None
 
+def get_measurement_name_id_by_name(measurement_name):
+    measurement_name = (
+        db.session.query(models.MeasurementName)
+        .filter(models.MeasurementName.name == 
+            measurement_name).one_or_none()
+    )
+
+    if measurement_name is not None:
+        return measurement_name.id
+    else:
+        return None
+
 def get_sensor_id(sensor_name: str) -> int:
     sensor_id = get_sensor_id_by_name(sensor_name)
     if sensor_id is not None:
@@ -63,21 +85,18 @@ def get_sensor_id(sensor_name: str) -> int:
         sensor = add_sensor(sensor_name)
         return sensor.id
 
-def get_site_id(site_name: str) -> int:
-    site_id = get_site_id_by_name(site_name)
-    if site_id is not None:
-        return site_id
+def get_location_id(location_name: str) -> int:
+    location_id = get_location_id_by_name(location_name)
+    if location_id is not None:
+        return location_id
     else:
-        site = add_site(site_name)
+        site = add_location(location_name)
         return site.id
 
-
-
-def test_db():
-    #sensor = add_sensor("TestSensor2")
-    #site = add_site("TestSite2")
-    site = get_site_id_by_name("TestSite2")
-    sensor = get_sensor_id_by_name("TestSensor3")
-
-    cycle = add_cycle(site)
-    measurement = add_measurement(cycle.id, sensor, 11111.111)
+def get_measurement_name_id(measurement_name: str) -> int:
+    measurement_name_id = get_measurement_name_id_by_name(measurement_name)
+    if measurement_name_id is not None:
+        return measurement_name_id
+    else:
+        measurement_type = add_measurement_name(measurement_name)
+        return measurement_type.id

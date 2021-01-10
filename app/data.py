@@ -43,7 +43,7 @@ def collect_data():
     num_of_samples = settings["freq"] * settings["duration"]
     sec_delay = 1 / settings["freq"]
 
-    site_id = database.get_site_id(settings["site_name"])
+    site_id = database.get_location_id(settings["site_name"])
     cycle = database.add_cycle(site_id)
 
 

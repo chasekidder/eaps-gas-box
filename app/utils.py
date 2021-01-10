@@ -7,7 +7,7 @@ def get_files_in_dir(path:str) -> list:
     return os.listdir(path)
 
 
-def get_live_data():
+def old_get_live_data():
     return {
             "timestamp": datetime.datetime.now(),
             "Electrical Conductivity": {
@@ -29,6 +29,9 @@ def get_live_data():
             "Oxygen": random.randint(1,10),
             "Gas Pressure": random.randint(1,10)
             }
+
+def get_live_data():
+    pass
 
 def str_to_bytes(data: str) -> bytes:
     return data.encode()

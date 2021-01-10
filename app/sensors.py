@@ -52,7 +52,7 @@ class I2CSensor(Sensor):
 
         # Addd the final measurements to the database
         for result in results:
-            database.add_measurement(cycle_id, sensor_id, results[result], result)
+            database.add_sample(cycle_id, sensor_id, results[result], result)
             print(f"{result}: {results[result]}")
 
 
@@ -107,7 +107,7 @@ class SDI12Sensor(Sensor):
 
         # Addd the final measurements to the database
         for result in results:
-            database.add_measurement(cycle_id, sensor_id, results[result], result)
+            database.add_sample(cycle_id, sensor_id, results[result], result)
             print(f"{result}: {results[result]}")
         
 
