@@ -6,15 +6,14 @@ from flask import send_from_directory
 from flask import jsonify
 from flask import make_response
 
-from . import app
-from . import utils
-from .forms import DataCollectionForm
+from app import frontend, utils
+from app.ui.forms import DataCollectionForm
 
-@app.route('/')
+@frontend.route('/')
 def index():
     return render_template("index.html")
 
-@app.route("/config/", methods=["GET", "POST"])
+@frontend.route("/config/", methods=["GET", "POST"])
 def config():
     form = DataCollectionForm()
 
@@ -31,25 +30,25 @@ def config():
 
     return render_template("config.html", form=form)
 
-@app.route("/data/")
+@frontend.route("/data/")
 def data():
-    files = utils.get_files_in_dir(app.config["DATA_FOLDER"])
+    files = utils.get_files_in_dir(frontend.config["DATA_FOLDER"])
     return render_template("data.html", file_list=files)
 
-@app.route("/download/<string:file_name>")
+@frontend.route("/download/<string:file_name>")
 def download(file_name):
-    return send_from_directory(app.config["DATA_FOLDER"], filename=file_name)
+    return send_from_directory(frontend.config["DATA_FOLDER"], filename=file_name)
 
-@app.route("/live/")
+@frontend.route("/live/")
 def live():
     return render_template("live.html")
 
-@app.route("/api/")
+@frontend.route("/api/")
 def api():
     data = utils.get_live_data()
     return jsonify(data)
 
-@app.route("/test/")
+@frontend.route("/test/")
 def test():
     from app import data
     data.collect_data()
