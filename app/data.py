@@ -24,8 +24,9 @@ def collect_data():
         "duration": 10, # seconds
         "site_name": "TestSite1",
         "sensors": [
-            SensorMetadata("SDI12", ["Moisture", "Temperature", "Electrical Conductivity"], "Sensor1"),
-            SensorMetadata("I2C", ["CO2"], "I2CSensor2", bytearray.fromhex("68"), bytearray.fromhex("04 04 22 00 08 2A"))
+            #SensorMetadata("SDI12", ["Moisture", "Temperature", "Electrical Conductivity"], "Sensor1"),
+            #SensorMetadata("I2C", ["CO2"], "I2CSensor2", bytearray.fromhex("68"), bytearray.fromhex("04 04 22 00 08 2A"))
+            SensorMetadata("ANALOG", ["CO2"], "CO2_Sensor", 1),
         ]
         
     }

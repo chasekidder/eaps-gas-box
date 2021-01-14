@@ -115,6 +115,25 @@ class SDI12Sensor(Sensor):
         pass
 
 
+class AnalogSensor(Sensor):
+    def __init__(self, name, measurement_names, pin_num):
+        self.id = database.get_sensor_id(name)
+        super().__init__(self.id, "ANALOG", name)
+        
+        self.pin = pin_num
+        self.measurement_names = measurement_names
+    
+    def read(self):
+        Sensor.conn.write(f"<ANALOG|{ self.pin }>")
+        return Sensor.conn.read()
+
+    def record_data(self, cycle_id, sensor_id):
+        data = self.read()
+        print(data)
+
+
+
+
 def new_sensor(sensor_metadata):
     if sensor_metadata.protocol == "SDI12":
         return SDI12Sensor(sensor_metadata.sensor_name, 
@@ -124,6 +143,10 @@ def new_sensor(sensor_metadata):
         return I2CSensor(sensor_metadata.sensor_name, 
             sensor_metadata.measurement_names, sensor_metadata.address, 
             sensor_metadata.data_bytes)
+
+    elif sensor_metadata.protocol == "ANALOG":
+        return AnalogSensor(sensor_metadata.sensor_name, 
+            sensor_metadata.measurement_names, sensor_metadata.address)
 
     else:
         return None

@@ -5,6 +5,7 @@
 
 // CONSTANTS
 #define SDI12_DATA_PIN 2
+#define BAUD 57600
 #define MAX_DATA_LEN 64
 
 #define DELIMETER "|"
@@ -17,7 +18,7 @@ char tx_data[MAX_DATA_LEN];
 
 boolean new_command = false;
 bool receiving = false;
-uint8_t i = 0;
+uint8_t cmd_index = 0;
 
 // GLOBAL OBJECTS
 SDISerial SDI12(SDI12_DATA_PIN);
@@ -28,6 +29,9 @@ void recv_serial_data();
 //void handle_uart(char*);
 //void send_uart_data();
 //void recv_uart_data();
+
+void handle_analog(char*);
+void recv_analog(char*);
 
 void handle_sdi12(char*);
 void send_sdi12(char*);
@@ -47,8 +51,9 @@ void setup() {
     SDI12.begin();
     Wire.begin();
     SPI.begin();
-    Serial.begin(9600);
+    Serial.begin(BAUD);
     delay(200);
+
 }
 
 void loop() {
@@ -56,8 +61,9 @@ void loop() {
     char* cmd;
 
     // Check for new commands
-    recv_serial_data();
-    //Serial.println(rx_data);
+    while (Serial.available() > 1){
+        recv_serial_data();
+    }
 
     if (new_command) {
 
@@ -89,8 +95,14 @@ void loop() {
             //Serial.println("Using UART!");
             //handle_uart(cmd);
         }
+
+        else if (strcmp(protocol, "ANALOG") == 0) {
+            Serial.println("Using ANALOG!");
+            handle_analog(cmd);
+        }
         
         else {
+            Serial.println(protocol);
             Serial.println(F("ERROR: PROTOCOL NOT DEFINED"));  
         }  
 
@@ -102,41 +114,53 @@ void loop() {
 
 // Serial Data Communication
 void recv_serial_data() {
-    // TODO: Refactor this to not need a global i and receiving variable
-    // It needs to check and wait for each character otherwise we can miss 
-    // them. Maybe put a loop in here and block main()?
-    
-    char recv;
+    char rx_byte = Serial.read();
 
-    // Check if there is a byte available at the serial port
-    if (Serial.available() > 0 && new_command == false) {
-        recv = Serial.read();
-        //Serial.println(recv);
-
-        if (receiving == true) {
-
-            // Check for End Of Line character and end string
-            if (recv == EOL) {
-                rx_data[i] = '\0'; 
-                receiving = false;
-                i = 0;
-                new_command = true;
-            }
-
-            // Add new character to string
-            else {
-                rx_data[i] = recv;
-                i++;
-            }
-        }
-
-        // Check for Beginning Of Line character
-        else if (recv == BOL) {
+    switch(rx_byte){
+        case '<':
             receiving = true;
-        }
+            Serial.println("BOL FOUND");
+            break;
+
+        case '>':
+            rx_data[cmd_index] = '\0';
+            receiving = false;
+            cmd_index = 0;
+            new_command = true;
+            Serial.println("EOL FOUND");
+            break;
+
+        case -1:
+            break;
+
+        default:
+            if (receiving){
+                rx_data[cmd_index] = rx_byte;
+                cmd_index++;
+                Serial.println(rx_byte);
+            }
+            break;
     }
 }
 
+// ANALOG Sensors
+void handle_analog(char* cmd){
+    recv_analog(cmd);
+    Serial.println(rx_data);
+}
+
+void recv_analog(char* cmd){
+    uint8_t pin = 0;
+    int val = 0;
+    float percent = 0;
+
+    pin = atoi(cmd);
+    val = analogRead(pin);
+    percent = val / 1024.0;
+
+    sprintf(rx_data, "%f", percent);
+    
+}
 
 // SDI-12 Protocol
 void handle_sdi12(char* cmd){
