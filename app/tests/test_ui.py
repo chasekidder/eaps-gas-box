@@ -5,8 +5,6 @@ from app.database.views import db_routes
 
 from flask import Flask
 
-url_base = "http://localhost:8000"
-
 @pytest.fixture(scope='module')
 def test_client():
     # Initialize the app
