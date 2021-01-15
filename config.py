@@ -1,7 +1,8 @@
-from os.path import abspath, dirname, join
+import os
+
 
 class BaseConfiguration():
-    _cwd = dirname(abspath(__file__))
+    BASEDIR = os.path.abspath(os.path.dirname(__file__))
     DEBUG = False
     SECRET_KEY = "f62c0c78db951fcc952e6b534e82d35e16e95136c64f4f31"
     DATA_FOLDER = "/home/pi/eaps-gas-box/DATA/"
@@ -10,11 +11,19 @@ class BaseConfiguration():
 
 class DevConfiguration(BaseConfiguration):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + BaseConfiguration.DB_NAME
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
+        BaseConfiguration.BASEDIR, BaseConfiguration.DB_NAME)
 
 
 class TestConfiguration(BaseConfiguration):
     DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
+        BaseConfiguration.BASEDIR, "test.db")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    BCRYPT_LOG_ROUNDS = 4
+    TESTING = True
+    WTF_CSRF_ENABLED = False
+
 
 class ProdConfigurateion(BaseConfiguration):
     pass
