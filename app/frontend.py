@@ -21,9 +21,9 @@ app.register_blueprint(db_routes)
 # TEST ROUTE
 @app.route("/test/")
 def test():
-    #from app import data
+    from app.measurement import measure
     from flask import render_template
-    #data.collect_data()
+    measure.start_cycle()
     return render_template("test.html")
 
 
