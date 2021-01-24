@@ -30,6 +30,7 @@ def start_cycle(config:dict=config):
 
     while(datetime.datetime.now() < end_time):
         target_time = datetime.datetime.now() + sample_delay
+        print(f"Now: {datetime.datetime.now()}, Target: {target_time}")
 
         values = query_all(sensors)
 
