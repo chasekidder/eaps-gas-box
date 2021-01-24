@@ -48,7 +48,7 @@ class MPL3115A2(Sensor):
         byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
             | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB | MPL3115A2_CTRL_REG1.ALT
         self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal)
-        time.sleep(.1)
+        time.sleep(.001)
 
         # 0x07 (7) Enable data ready events Altitude, Pressure, Temperature
         byteVal = MPL3115A2_PT_DATA_CFG.TDEFE | MPL3115A2_PT_DATA_CFG.PDEFE | MPL3115A2_PT_DATA_CFG.DREM
@@ -67,7 +67,7 @@ class MPL3115A2(Sensor):
         byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
             | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB
         self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal)
-        time.sleep(.5)
+        time.sleep(.001)
 
         # Read barometric pressure (3 bytes)
         # Pressure MSB, Pressure CSB, Pressure LSB
@@ -84,7 +84,7 @@ class MPL3115A2(Sensor):
         byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
             | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB | MPL3115A2_CTRL_REG1.ALT
         self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal)
-        time.sleep(.5)
+        time.sleep(.001)
 
         # Read altitude (3 bytes)
         # Altitude MSB, Altitude CSB, Altitude LSB
@@ -100,7 +100,7 @@ class MPL3115A2(Sensor):
         byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
             | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB | MPL3115A2_CTRL_REG1.ALT
         self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal)
-        time.sleep(.1)
+        time.sleep(.001)
 
         # Read ambiant temperature (2 bytes)
         # Temperature MSB, Temperature LSB
