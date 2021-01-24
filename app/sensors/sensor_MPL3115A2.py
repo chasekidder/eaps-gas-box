@@ -67,7 +67,7 @@ class MPL3115A2(Sensor):
         byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
             | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB
         self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal)
-        time.sleep(.001)
+        time.sleep(.01)
 
         # Read barometric pressure (3 bytes)
         # Pressure MSB, Pressure CSB, Pressure LSB
