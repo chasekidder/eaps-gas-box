@@ -58,7 +58,7 @@ class MPL3115A2(Sensor):
         kpa = self.read_pressure()
         return {
             "barometric_pressure": kpa,
-            "altitude": (44330.77 * (1 - ((kpa * 1000) / 101326)^(0.1902632))),
+            "altitude": (44330.77 * (1 - pow(((kpa * 1000) / 101326), (0.1902632)))),
             "temperature_celcius": self.read_temperature_c(),
             "temperature_farenheit": self.read_temperature_f()
         }
