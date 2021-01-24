@@ -1,39 +1,43 @@
 from sqlalchemy import Column, String, Date, Integer, Numeric, BLOB, ForeignKey, Table
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
-from app import db
+from app.frontend import app
+from flask_sqlalchemy import SQLAlchemy
+
+# Open the DB Connection
+db = SQLAlchemy(app)
 
 class Measurement(db.Model):
     __tablename__ = "measurements"
     id = Column(Integer, primary_key=True)
-    timestamp = Column("timestamp", Date)
-    value = Column("value", Numeric)
+    timestamp = Column("timestamp", Date, nullable=False)
+    value = Column("value", Numeric, nullable=False)
 
-    # many to one
-    cycle = Column(Integer, ForeignKey("cycles.id"))
-    sensor = Column(Integer, ForeignKey("sensors.id"))
-    data_type = Column(Integer, ForeignKey("data_types.id"))
+    cycle_id = Column(Integer, ForeignKey("cycles.id"), nullable=False)
+    sensor_id = Column(Integer, ForeignKey("sensors.id"), nullable=False)
+    data_type_id = Column(Integer, ForeignKey("data_types.id"), nullable=False)
+
+    cycle = relationship("Cycle", backref="measurement")
+    sensor = relationship("Sensor", backref="measurement")
+    data_type = relationship("Data_Type", backref="measurement")
 
     def __init__(self, timestamp, value, cycle, sensor, data_type):
         self.timestamp = timestamp
         self.value = value
-        #self.cycle = cycle
-        #self.sensor = sensor
-        #self.data_type = data_type
+        self.cycle = cycle
+        self.sensor = sensor
+        self.data_type = data_type
 
 
 class Cycle(db.Model):
     __tablename__ = "cycles"
     id = Column(Integer, primary_key=True)
-    start_time = Column("start_time", Date)
+    start_time = Column("start_time", Date, nullable=False)
     end_time = Column("end_time", Date)
 
-    # one to many
-    measurements = relationship("Measurement", cascade="all, delete, delete-orphan")
-    sensors = relationship("Sensor")
-    
-    # many to one
-    site = Column(Integer, ForeignKey("sites.id"))
+    site_id = Column(Integer, ForeignKey("sites.id"), nullable=False)
+
+    site = relationship("Site", backref="cycle")
 
     def __init__(self, start_time, site, sensors):
         self.start_time = start_time
@@ -50,36 +54,36 @@ sensor_datatype_association = Table("sensors_datatypes", db.Model.metadata,
 class Sensor(db.Model):
     __tablename__ = "sensors"
     id = Column(Integer, primary_key=True)
-    name = Column("name", String)
-    address = Column("address", BLOB)
+    name = Column("name", String, nullable=False)
+    address = Column("address", BLOB, nullable=False)
 
     # many to one
-    protocol = Column(Integer, ForeignKey("protocols.id"))
-    
-    # one to one
-    #commands = relationship("Command", useList=False, back_populates="sensor")
-    commands = relationship("Command", back_populates="sensor")
+    protocol_id = Column(Integer, ForeignKey("protocols.id"), nullable=False)
+    data_type_id = Column(Integer, ForeignKey("data_types.id"), nullable=False)
+    command_id = Column(Integer, ForeignKey("commands.id"), nullable=False)
 
-    # many to many
-    data_types = relationship("Data_Type", secondary=sensor_datatype_association)
+    protocol = relationship("Protocol", backref="sensor")
+
+    data_types = relationship("Data_Type", 
+        secondary=sensor_datatype_association, backref="sensors")
+
+    command = relationship("Command", 
+        #backref=backref("sensor", useList=False))
+        backref="sensor")
 
     def __init__(self, name, address, protocol, commands, data_types):
         self.name = name
         self.address = address
         self.protocol = protocol
 
-        # maybe dont init these???
-        self.commands = commands
+        self.command = commands
         self.data_types = data_types
 
     
 class Protocol(db.Model):
     __tablename__ = "protocols"
     id = Column(Integer, primary_key=True)
-    name = Column("name", String)
-
-    # one to many
-    sensors = relationship("Sensor")
+    name = Column("name", String, nullable=False)
 
     def __init__(self, name):
         self.name = name
@@ -88,12 +92,9 @@ class Protocol(db.Model):
 class Command(db.Model):
     __tablename__ = "commands"
     id = Column(Integer, primary_key=True)
-    read = Column("read", BLOB)
+    read = Column("read", BLOB, nullable=False)
     write = Column("write", BLOB)
     calibrate = Column("calibrate", BLOB)
-
-    # one to one
-    sensor = relationship("Sensor", back_populates="command")
 
     def __init__(self, read, write, calibrate):
         self.read = read
@@ -104,14 +105,8 @@ class Command(db.Model):
 class Data_Type(db.Model):
     __tablename__ = "data_types"
     id = Column(Integer, primary_key=True)
-    name = Column("name", String)
-    unit = Column("unit", String)
-
-    # one to many
-    measurements = relationship("Measurement")
-
-    # many to many
-    sensors = relationship("Sensor")
+    name = Column("name", String, nullable=False)
+    unit = Column("unit", String, nullable=False)
 
     def __init__(self, name, unit):
         self.name = name
@@ -121,10 +116,7 @@ class Data_Type(db.Model):
 class Site(db.Model):
     __tablename__ = "sites"
     id = Column(Integer, primary_key=True)
-    name = Column("name", String)
-
-    # one to many
-    cycles = relationship("Cycle")
+    name = Column("name", String, nullable=False)
 
     def __init__(self, name):
         self.name = name

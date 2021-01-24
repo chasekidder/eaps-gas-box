@@ -1,6 +1,5 @@
 import os
 
-
 class BaseConfiguration():
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
     DEBUG = False
@@ -14,16 +13,12 @@ class DevConfiguration(BaseConfiguration):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
         BaseConfiguration.BASEDIR, BaseConfiguration.DB_NAME)
 
-
 class TestConfiguration(BaseConfiguration):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
-        BaseConfiguration.BASEDIR, "test.db")
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    BCRYPT_LOG_ROUNDS = 4
     TESTING = True
     WTF_CSRF_ENABLED = False
-
 
 class ProdConfigurateion(BaseConfiguration):
     pass

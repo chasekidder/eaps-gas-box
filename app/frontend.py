@@ -1,7 +1,8 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from app.ui.views import ui_routes
 from app.database.views import db_routes
+
+import sys
 
 __version__ = (1, 0, 0, "dev")
 
@@ -26,8 +27,11 @@ def test():
     return render_template("test.html")
 
 
-# Load the config file
-app.config.from_object('config.DevConfiguration')
+# Load the config file based on if we're testing
+if "pytest" in sys.modules:
+    app.config.from_object("config.TestConfiguration")
+    app.template_folder = "../ui/templates/"
+    app.static_folder = "../ui/static/"
 
-# Open the DB Connection
-db = SQLAlchemy(app)
+else:
+    app.config.from_object('config.DevConfiguration')

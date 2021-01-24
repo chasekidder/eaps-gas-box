@@ -1,25 +1,4 @@
-import pytest
 
-from app.ui.views import ui_routes
-from app.database.views import db_routes
-
-from flask import Flask
-
-@pytest.fixture(scope='module')
-def test_client():
-    # Initialize the app
-    app = Flask(__name__, instance_relative_config=True, 
-        template_folder="../ui/templates/", static_folder="../ui/static/")
-    app.config.from_object('config.TestConfiguration')
-
-    # Register routes
-    app.register_blueprint(ui_routes)
-    app.register_blueprint(db_routes)
-    
-
-    with app.test_client() as testing_client:
-        with app.app_context():
-            yield testing_client  
 
 
 class TestUIPages():
