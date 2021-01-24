@@ -1,6 +1,6 @@
 from app.sensors.sensor_base import Sensor
 
-import smbus
+import smbus2
 import time
 
 MPL3115A2_I2C_ADDRESS = 0x60
@@ -40,7 +40,7 @@ class MPL3115A2(Sensor):
         ]
         
         super.__init__(id, type, protocol, address, measurements)
-        self.bus = smbus.SMBus(1)
+        self.bus = smbus2.SMBus(1)
         self.__initialize_sensor()
 
     def __initialize_sensor(self):
