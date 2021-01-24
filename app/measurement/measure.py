@@ -12,6 +12,7 @@ celery = Celery(broker="redis://localhost:6379/0")
 config = {
     "sensor_metadata": {
         0: "MPL3115A2",
+        1: "AWM3300V",
     },
     "sample_frequency": 1,
     "duration": 0.5,
