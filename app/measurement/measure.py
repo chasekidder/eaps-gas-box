@@ -2,7 +2,7 @@ from app.sensors.sensor_MPL3115A2 import MPL3115A2
 from celery import Celery
 
 import time
-import datetime
+
 
 # Start Celery Instance
 celery = Celery(broker="redis://localhost:6379/0")
@@ -24,13 +24,13 @@ def start_cycle(config:dict=config):
 
     sensors = [new_sensor(s_id, sensor_metadata[s_id]) for s_id in sensor_metadata]
 
-    sample_delay = datetime.timedelta(seconds=float(1 / sample_freq))
-    start_time = datetime.datetime.now()
-    end_time = start_time + datetime.timedelta(minutes=duration)
+    sample_delay = 1 / sample_freq
+    start_time = time.time()
+    end_time = start_time + (60 * duration)
 
-    while(datetime.datetime.now() < end_time):
-        target_time = datetime.datetime.now() + sample_delay
-        print(f"Now: {datetime.datetime.now()}, Target: {target_time}")
+    while(time.time() < end_time):
+        target_time = time.time() + sample_delay
+        print(f"Now: {time.time()}, Target: {target_time}")
 
         values = query_all(sensors)
 
@@ -38,9 +38,9 @@ def start_cycle(config:dict=config):
         print(values)
 
         # Check if sample collection completed before target time
-        if (datetime.datetime.now() < target_time):
+        if (time.time() < target_time):
             print("Hit Target!")
-            time.sleep(target_time - datetime.datetime.now())
+            time.sleep(target_time - time.time())
         else:
             print("Missed Target! :(")
 
