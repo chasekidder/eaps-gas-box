@@ -1,6 +1,7 @@
 from flask import Blueprint
 
 from flask import render_template
+from app.frontend import celery
 
 ui_routes = Blueprint("ui_routes", __name__)
 
@@ -13,9 +14,12 @@ def live():
     return render_template("live.html")
 
 # TEST ROUTE
-@ui_routes.route("/cycle/")
-def cycle():
+@ui_routes.route("/test/")
+def test():
     from app.measurement import measure
-    print("Startig cycle!")
-    measure.start_cycle()
+    print("Starting cycle!")
+    task = measure.start_cycle.delay()
+    async_result = celery.AsyncResult(id=task.task_id, app=celery)
+    async_result = async_result.get()
+
     return render_template("test.html")

@@ -1,4 +1,5 @@
 from app.sensors.sensor_MPL3115A2 import MPL3115A2
+from app.frontend import celery
 
 import time
 import datetime
@@ -11,6 +12,7 @@ config = {
     "duration": 1,
 }
 
+@celery.task(name="measurement.cycle")
 def start_cycle(config:dict=config):
     # duration is 1 minute minimum
     sensor_metadata = config["sensor_metadata"]
