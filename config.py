@@ -7,7 +7,6 @@ class BaseConfiguration():
     DATA_FOLDER = "/home/pi/eaps-gas-box/DATA/"
     DB_NAME = "appdata.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    CELERY_BROKER = "redis://localhost:6379/0"
 
 class DevConfiguration(BaseConfiguration):
     DEBUG = True
