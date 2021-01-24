@@ -1,7 +1,7 @@
 from flask import Blueprint
 
 from flask import render_template
-from app.frontend import celery
+from app.measurement.measure import celery
 
 ui_routes = Blueprint("ui_routes", __name__)
 

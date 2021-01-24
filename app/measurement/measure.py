@@ -1,8 +1,12 @@
 from app.sensors.sensor_MPL3115A2 import MPL3115A2
-from app.frontend import celery
+from celery import Celery
+from app.frontend import app
 
 import time
 import datetime
+
+# Start Celery Instance
+celery = Celery(broker=app.config["CELERY_BROKER"])
 
 config = {
     "sensor_metadata": {

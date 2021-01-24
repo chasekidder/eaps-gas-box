@@ -1,7 +1,6 @@
 from flask import Flask
 from app.ui.views import ui_routes
 from app.database.views import db_routes
-from celery import Celery
 
 import sys
 
@@ -31,5 +30,4 @@ if "pytest" in sys.modules:
 else:
     app.config.from_object('config.DevConfiguration')
 
-# Start Celery Instance
-celery = Celery(broker=app.config["CELERY_BROKER"])
+
