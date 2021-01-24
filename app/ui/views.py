@@ -13,10 +13,9 @@ def live():
     return render_template("live.html")
 
 # TEST ROUTE
-@ui_routes.route("/test/")
+@ui_routes.route("/cycle/")
 def test():
     from app.measurement import measure
-    from flask import render_template
     print("Startig cycle!")
     measure.start_cycle()
     return render_template("test.html")
