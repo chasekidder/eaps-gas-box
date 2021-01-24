@@ -39,7 +39,7 @@ class MPL3115A2(Sensor):
             "temperature_farenheit"
         ]
         
-        super.__init__(id, type, protocol, address, measurements)
+        super().__init__(id, type, protocol, address, measurements)
         self.bus = smbus2.SMBus(1)
         self.__initialize_sensor()
 
