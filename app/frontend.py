@@ -18,14 +18,7 @@ app = Flask(__name__,
 app.register_blueprint(ui_routes)
 app.register_blueprint(db_routes)
 
-# TEST ROUTE
-@app.route("/test/")
-def test():
-    from app.measurement import measure
-    from flask import render_template
-    print("Startig cycle!")
-    measure.start_cycle()
-    return render_template("test.html")
+
 
 
 # Load the config file based on if we're testing
