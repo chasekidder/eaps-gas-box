@@ -1,4 +1,6 @@
 from app.sensors.sensor_MPL3115A2 import MPL3115A2
+from app.sensors.sensor_AWM3300V import AWM3300V
+from app.database import database
 from celery import Celery
 
 import time
@@ -12,7 +14,7 @@ config = {
         0: "MPL3115A2",
     },
     "sample_frequency": 1,
-    "duration": 1,
+    "duration": 0.5,
 }
 
 @celery.task(name="measurement.cycle")
@@ -30,12 +32,12 @@ def start_cycle(config:dict=config):
 
     while(time.time() < end_time):
         target_time = time.time() + sample_delay
-        print(f"Now: {time.time()}, Target: {target_time}")
+        #print(f"Now: {time.time()}, Target: {target_time}")
 
-        values = query_all(sensors)
+        responses = query_all(sensors)
 
         # log to database by id
-        print(values)
+        log_data(responses)
 
         # Check if sample collection completed before target time
         if (time.time() < target_time):
@@ -54,4 +56,12 @@ def new_sensor(id, s_type):
         return MPL3115A2(id)
 
     elif s_type == "TEROS-12":
+        pass
+
+    elif s_type == "AWM3300V":
+        return AWM3300V(id)
+
+def log_data(responses:dict):
+    for sensor in responses:
+        #add_measurement
         pass
