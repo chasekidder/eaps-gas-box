@@ -20,6 +20,6 @@ def test():
     print("Starting cycle!")
     task = measure.start_cycle.delay()
     async_result = celery.AsyncResult(id=task.task_id, app=celery)
-    async_result = async_result.get()
+    #async_result = async_result.get()
 
     return render_template("test.html")
