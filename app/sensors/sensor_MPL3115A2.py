@@ -55,9 +55,10 @@ class MPL3115A2(Sensor):
         self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_PT_DATA_CFG.ADDRESS, byteVal)
 
     def read_all(self) -> dict:
+        kpa = self.read_pressure()
         return {
-            "barometric_pressure": self.read_pressure(),
-            "altitude": self.read_altitude(),
+            "barometric_pressure": kpa,
+            "altitude": (44330.77 * (1 - ((kpa * 1000) / 101326)^(0.1902632))),
             "temperature_celcius": self.read_temperature_c(),
             "temperature_farenheit": self.read_temperature_f()
         }
@@ -67,7 +68,7 @@ class MPL3115A2(Sensor):
         byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
             | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB
         self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal)
-        time.sleep(.01)
+        time.sleep(.001)
 
         # Read barometric pressure (3 bytes)
         # Pressure MSB, Pressure CSB, Pressure LSB
