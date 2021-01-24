@@ -23,6 +23,7 @@ app.register_blueprint(db_routes)
 def test():
     from app.measurement import measure
     from flask import render_template
+    print("Startig cycle!")
     measure.start_cycle()
     return render_template("test.html")
 
