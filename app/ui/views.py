@@ -14,7 +14,7 @@ def live():
 
 # TEST ROUTE
 @ui_routes.route("/cycle/")
-def test():
+def cycle():
     from app.measurement import measure
     print("Startig cycle!")
     measure.start_cycle()
