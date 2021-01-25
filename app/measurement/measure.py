@@ -2,6 +2,7 @@
 from app.sensors.sensor_MPL3115A2 import MPL3115A2
 from app.sensors.sensor_AWM3300V import AWM3300V
 from app.sensors.sensor_TEROS12 import TEROS12
+from app.sensors.sensor_ABPDANN060PGAA5 import ABPxx
 
 from celery import Celery
 
@@ -15,7 +16,8 @@ config = {
     "sensor_metadata": {
         0: "MPL3115A2",
         1: "AWM3300V",
-        2: "TEROS12"
+        #2: "TEROS12",
+        3: "ABPxxx"
     },
     "sample_frequency": 1,
     "duration": 0.5,
@@ -64,6 +66,9 @@ def new_sensor(id, s_type):
 
     elif s_type == "AWM3300V":
         return AWM3300V(id)
+
+    elif s_type == "ABPxxx":
+        return ABPxx(id)
 
 def log_data(responses:dict):
     for sensor in responses:
