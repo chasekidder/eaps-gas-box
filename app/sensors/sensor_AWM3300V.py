@@ -36,6 +36,8 @@ class AWM3300V(Sensor):
         # TODO: Make sure to receive 2 bytes instead of one because the nano is
         # supposed to be sending a 16-bit number!
         value = self.bus.read_byte_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.A_READ_A0)
+        
+        #TODO: manipulate value! the current return is a raw adc 10bit num
         return value
 
 
