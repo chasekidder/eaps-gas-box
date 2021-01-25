@@ -19,7 +19,7 @@ config = {
         1: "AWM3300V",
         #2: "TEROS12",
         3: "ABPxxx",
-        4: "LOX02F"
+        #4: "LOX02F"
     },
     "sample_frequency": 1,
     "duration": 0.5,
