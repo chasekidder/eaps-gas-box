@@ -2,6 +2,18 @@ from app.sensors.sensor_base import Sensor
 
 import smbus2
 
+class NANO_I2C():
+    ADDRESS = 0x14
+    COMMAND_REG = 0x00
+    A_READ_A0 = 0x10
+    A_READ_A1 = 0x11
+    A_READ_A2 = 0x12
+    A_READ_A3 = 0x13
+    A_READ_A4 = 0x14
+    A_READ_A5 = 0x15
+    SDI12_READ = 0x20
+    UART_READ = 0x30
+
 class AWM3300V(Sensor):
     def __init__(self, id):
         type = "MPL3115A2"
@@ -21,10 +33,10 @@ class AWM3300V(Sensor):
         }
 
     def read_mass_flow(self) -> float:
-        command = f"ANALOG|{self.ADDRESS}"
-        cmd = [ord(c) for c in command]
-        self.bus.write_i2c_block_data(self.arduino_addr, 0x00, cmd)
-        value = self.bus.read_byte_data(self.arduino_addr, 0)
+        #command_string = [ord(c) for c in "0R0!"]
+        #self.bus.write_i2c_block_data(NANO_I2C.ADDRESS, NANO_I2C.COMMAND_REG, command_string)
+        value = self.bus.read_byte_data(self.arduino_addr, NANO_I2C.A_READ_A0)
+        print(value)
         return value
 
 
