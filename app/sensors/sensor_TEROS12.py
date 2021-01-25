@@ -44,7 +44,7 @@ class TEROS12(Sensor):
 
     def read_sensor(self) -> str:
         command_string = [ord(c) for c in f"{ self.ADDRESS }R0!"]
-        self.bus.write_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.COMMAND_REG, command_string)
+        self.bus.write_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.CMD_REG_WRITE, command_string)
         value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.A_READ_A0, 16)
 
         return value
