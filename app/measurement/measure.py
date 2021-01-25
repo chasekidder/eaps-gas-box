@@ -41,6 +41,7 @@ def start_cycle(config:dict=config):
         #print(f"Now: {time.time()}, Target: {target_time}")
 
         responses = query_all(sensors)
+        print(responses)
 
         # log to database by id
         log_data(responses)
