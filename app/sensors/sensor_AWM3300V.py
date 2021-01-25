@@ -36,7 +36,8 @@ class AWM3300V(Sensor):
     def read_mass_flow(self) -> float:
         #command_string = [ord(c) for c in "0R0!"]
         #self.bus.write_i2c_block_data(NANO_I2C.ADDRESS, NANO_I2C.COMMAND_REG, command_string)
-        value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.A_READ_A0, 2)
+        #value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.A_READ_A0, 1)
+        value = self.bus.read_byte_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.A_READ_A0)
         print(value)
         return value
 
