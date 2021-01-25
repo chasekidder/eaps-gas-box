@@ -6,7 +6,7 @@ class AWM3300V(Sensor):
     def __init__(self, id):
         type = "MPL3115A2"
         protocol = "ANALOG"
-        address = 14
+        address = 19
         measurements = [
             "mass_flow"
         ]
