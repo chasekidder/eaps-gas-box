@@ -40,18 +40,18 @@ class LOX02F(Sensor):
 
     def read_all(self) -> dict:
         return {
-            "oxygen_concetration": self.read_oxygen()
+            "oxygen_concentration": self.read_oxygen()
         }
 
     def read_oxygen(self) -> float:
         command_string = [ord(c) for c in "A\r\n"] # \r\n may need to be encoded to send as the correct bytes idk
         self.bus.write_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.CMD_REG_WRITE, command_string)
         value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.UART1_POLL, 1)
-        while (value == 0x00):
+        while (value[0] == 0x00):
             time.sleep(.01)
-            value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.UART1_READ, 1)
+            value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.UART1_READ, 6)
         
         #TODO: manipulate value! the current return is a raw adc 10bit num
-        return value
+        return value[0]
 
 
