@@ -1,6 +1,6 @@
 from app.sensors.sensor_MPL3115A2 import MPL3115A2
 from app.sensors.sensor_AWM3300V import AWM3300V
-from app.database import database
+
 from celery import Celery
 
 import time
