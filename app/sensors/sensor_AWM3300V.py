@@ -5,7 +5,7 @@ import smbus2
 ARDUINO_NANO_I2C_ADDRESS = 0x14
 
 class NANO_I2C_CMD():
-    COMMAND_REG = 0x00
+    CMD_REG_WRITE = 0x00
     A_READ_A0 = 0x10
     A_READ_A1 = 0x11
     A_READ_A2 = 0x12
@@ -26,7 +26,6 @@ class AWM3300V(Sensor):
         
         super().__init__(id, type, protocol, address, measurements)
         self.bus = smbus2.SMBus(1)
-        self.arduino_addr = 0x14
 
     def read_all(self) -> dict:
         return {
@@ -34,11 +33,9 @@ class AWM3300V(Sensor):
         }
 
     def read_mass_flow(self) -> float:
-        #command_string = [ord(c) for c in "0R0!"]
-        #self.bus.write_i2c_block_data(NANO_I2C.ADDRESS, NANO_I2C.COMMAND_REG, command_string)
-        #value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.A_READ_A0, 1)
+        # TODO: Make sure to receive 2 bytes instead of one because the nano is
+        # supposed to be sending a 16-bit number!
         value = self.bus.read_byte_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.A_READ_A0)
-        print(value)
         return value
 
 
