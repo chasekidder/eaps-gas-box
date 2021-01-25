@@ -13,7 +13,10 @@ class NANO_I2C_CMD():
     A_READ_A4 = 0x14
     A_READ_A5 = 0x15
     SDI12_READ = 0x20
-    UART_READ = 0x30
+    UART0_READ = 0x30
+    UART1_READ = 0x31
+    UART0_POLL = 0x32
+    UART1_POLL = 0x33
 
 class TEROS12(Sensor):
     def __init__(self, id):
@@ -32,7 +35,7 @@ class TEROS12(Sensor):
     def read_all(self) -> dict:
         response = self.read_sensor()
         print(response)
-        temperature = 0
+        temperature = response
         e_c = 0
         moisture = 0
 

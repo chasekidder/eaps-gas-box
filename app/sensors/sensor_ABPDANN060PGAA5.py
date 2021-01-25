@@ -13,7 +13,10 @@ class NANO_I2C_CMD():
     A_READ_A4 = 0x14
     A_READ_A5 = 0x15
     SDI12_READ = 0x20
-    UART_READ = 0x30
+    UART0_READ = 0x30
+    UART1_READ = 0x31
+    UART0_POLL = 0x32
+    UART1_POLL = 0x33
 
 class ABPxx(Sensor):
     def __init__(self, id):
