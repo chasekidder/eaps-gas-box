@@ -13,18 +13,6 @@ import time
 # Start Celery Instance
 celery = Celery(broker="redis://localhost:6379/0")
 
-config = {
-    "sensor_metadata": {
-        0: "MPL3115A2",
-        1: "AWM3300V",
-        #2: "TEROS12",
-        3: "ABPxxx",
-        #4: "LOX02F"
-    },
-    "sample_frequency": 1,
-    "duration": 0.5,
-}
-
 @celery.task(name="measurement.cycle")
 def start_cycle(config:dict=config):
     # duration is 1 minute minimum

@@ -44,6 +44,7 @@ class Sensor(db.Model):
     name = Column("name", String, nullable=False)
     address = Column("address", BLOB, nullable=False)
 
+    # This might not work! The data types are many-many so more than one id
     # many to one
     data_type_id = Column(Integer, ForeignKey("data_types.id"), nullable=False)
 

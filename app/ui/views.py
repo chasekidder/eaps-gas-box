@@ -13,13 +13,3 @@ def index():
 def live():
     return render_template("live.html")
 
-# TEST ROUTE
-@ui_routes.route("/test/")
-def test():
-    from app.measurement import measure
-    print("Starting cycle!")
-    task = measure.start_cycle.delay()
-    async_result = celery.AsyncResult(id=task.task_id, app=celery)
-    #async_result = async_result.get()
-
-    return render_template("test.html")
