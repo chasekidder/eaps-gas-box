@@ -3,13 +3,12 @@ import random
 import datetime
 import re
 
-from app.frontend import latest
 
 def get_files_in_dir(path:str) -> list:
     return os.listdir(path)
 
 
-def old_get_live_data():
+def get_live_data():
     return {
             "timestamp": datetime.datetime.now(),
             "Electrical Conductivity": {
@@ -32,8 +31,7 @@ def old_get_live_data():
             "Gas Pressure": random.randint(1,10)
             }
 
-def get_live_data():
-    return latest
+
 
 def str_to_bytes(data: str) -> bytes:
     return data.encode()
