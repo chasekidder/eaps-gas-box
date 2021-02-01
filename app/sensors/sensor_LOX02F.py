@@ -1,4 +1,4 @@
-from app.sensors.sensor_base import Sensor
+from app.sensors.sensor_base import Sensor, try_io
 
 import smbus2
 import time
@@ -34,13 +34,13 @@ class LOX02F(Sensor):
 
     def __initialize_sensor(self):
         command_string = [ord(c) for c in "M 1\r\n"] # \r\n may need to be encoded to send as the correct bytes idk
-        self.bus.write_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.CMD_REG_WRITE, command_string)
-        value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.UART1_POLL, 1)
+        try_io(lambda: self.bus.write_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.CMD_REG_WRITE, command_string))
+        value = try_io(lambda: self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.UART1_POLL, 1))
 
 
     def read_all(self) -> dict:
         return {
-            "oxygen_concentration": self.read_oxygen()
+            "oxygen_concentration": try_io(lambda: self.read_oxygen())
         }
 
     def read_oxygen(self) -> float:
