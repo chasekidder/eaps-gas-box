@@ -8,7 +8,7 @@ from flask import flash
 from app import utils
 from app.ui.forms import AddSensorForm
 
-from app.database.database import add_sensor
+
 
 
 sensor_routes = Blueprint("sensor_routes", __name__)
@@ -29,7 +29,7 @@ def sensor_add():
         name = form.name.data
         address = form.address.data
         data_type = float(form.data_type_id.data)
-        add_sensor(name, address, data_type)
+        #add_sensor(name, address, data_type)
         
         flash("Success! Sensor Added!", "alert-success")
         return redirect("/")
