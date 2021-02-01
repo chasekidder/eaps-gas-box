@@ -3,6 +3,25 @@ from app.sensors.sensor_base import Sensor
 import smbus2
 import time
 
+def try_io(call, tries=10):
+    assert tries > 0
+    error = None
+    result = None
+
+    while tries:
+        try:
+            result = call()
+        except IOError as e:
+            error = e
+            tries -= 1
+        else:
+            break
+
+    if not tries:
+        raise error
+
+    return result
+
 MPL3115A2_I2C_ADDRESS = 0x60
 MPL3115A2_REGISTER_STATUS_ADDRESS = 0x00
 MPL3115A2_REGISTER_PRESSURE_MSB = 0x01
@@ -44,26 +63,24 @@ class MPL3115A2(Sensor):
         self.__initialize_sensor()
 
     def __initialize_sensor(self):
-        try:
-            # 0x39 (57) Active Mode, OSR = 128, Barometer Mode
-            byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
-                | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB
-            self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal)
-            time.sleep(.001)
+        
+        # 0x39 (57) Active Mode, OSR = 128, Barometer Mode
+        byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
+            | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB
+        try_io(lambda: self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal))
+        time.sleep(.001)
 
-            # 0x07 (7) Enable data ready events Altitude, Pressure, Temperature
-            byteVal = MPL3115A2_PT_DATA_CFG.TDEFE | MPL3115A2_PT_DATA_CFG.PDEFE | MPL3115A2_PT_DATA_CFG.DREM
-            self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_PT_DATA_CFG.ADDRESS, byteVal)
-        except:
-            self.__initialize_sensor()
+        # 0x07 (7) Enable data ready events Altitude, Pressure, Temperature
+        byteVal = MPL3115A2_PT_DATA_CFG.TDEFE | MPL3115A2_PT_DATA_CFG.PDEFE | MPL3115A2_PT_DATA_CFG.DREM
+        try_io(lambda:self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_PT_DATA_CFG.ADDRESS, byteVal))
 
     def read_all(self) -> dict:
-        kpa = self.read_pressure()
+        kpa = try_io(lambda:self.read_pressure())
         return {
             "barometric_pressure": kpa,
             "altitude": (44330.77 * (1 - pow(((kpa * 1000) / 101326), (0.1902632)))),
-            "temperature_celcius": self.read_temperature_c(),
-            "temperature_farenheit": self.read_temperature_f()
+            "temperature_celcius": try_io(lambda:self.read_temperature_c()),
+            "temperature_farenheit": try_io(lambda:self.read_temperature_f())
         }
 
     def read_pressure(self) -> float:
