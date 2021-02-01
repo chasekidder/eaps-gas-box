@@ -44,15 +44,18 @@ class MPL3115A2(Sensor):
         self.__initialize_sensor()
 
     def __initialize_sensor(self):
-        # 0x39 (57) Active Mode, OSR = 128, Barometer Mode
-        byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
-            | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB
-        self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal)
-        time.sleep(.001)
+        try:
+            # 0x39 (57) Active Mode, OSR = 128, Barometer Mode
+            byteVal = MPL3115A2_CTRL_REG1.OS0 | MPL3115A2_CTRL_REG1.OS1 \
+                | MPL3115A2_CTRL_REG1.OS2 | MPL3115A2_CTRL_REG1.SBYB
+            self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_CTRL_REG1.ADDRESS, byteVal)
+            time.sleep(.001)
 
-        # 0x07 (7) Enable data ready events Altitude, Pressure, Temperature
-        byteVal = MPL3115A2_PT_DATA_CFG.TDEFE | MPL3115A2_PT_DATA_CFG.PDEFE | MPL3115A2_PT_DATA_CFG.DREM
-        self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_PT_DATA_CFG.ADDRESS, byteVal)
+            # 0x07 (7) Enable data ready events Altitude, Pressure, Temperature
+            byteVal = MPL3115A2_PT_DATA_CFG.TDEFE | MPL3115A2_PT_DATA_CFG.PDEFE | MPL3115A2_PT_DATA_CFG.DREM
+            self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_PT_DATA_CFG.ADDRESS, byteVal)
+        except:
+            self.__initialize_sensor()
 
     def read_all(self) -> dict:
         kpa = self.read_pressure()
