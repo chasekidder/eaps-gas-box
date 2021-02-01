@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Date, Integer, Numeric, BLOB, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
 
-
+from app.frontend import app
 from flask_sqlalchemy import SQLAlchemy
 
 # Open the DB Connection
