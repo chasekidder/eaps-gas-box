@@ -33,3 +33,5 @@ else:
 
 # Create database
 db = SQLAlchemy(app)
+
+latest = {}

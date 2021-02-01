@@ -7,6 +7,7 @@ from app.sensors.sensor_LOX02F import LOX02F
 from app.sensors.sensor_GMP251 import GMP251
 
 from celery import Celery
+from tempfile import SpooledTemporaryFile
 
 import time
 
@@ -16,33 +17,35 @@ celery = Celery(broker="redis://localhost:6379/0")
 
 @celery.task(name="measurement.cycle")
 def start_cycle(config:dict):
-    # duration is 1 minute minimum
-    sensor_metadata = config["sensor_metadata"]
-    sample_freq = config["sample_frequency"]
-    duration = config["duration"]
+    with SpooledTemporaryFile() as tmp:
 
-    sensors = [new_sensor(s_id, sensor_metadata[s_id]) for s_id in sensor_metadata]
+        # duration is 1 minute minimum
+        sensor_metadata = config["sensor_metadata"]
+        sample_freq = config["sample_frequency"]
+        duration = config["duration"]
 
-    sample_delay = 1 / sample_freq
-    start_time = time.time()
-    end_time = start_time + (60 * duration)
+        sensors = [new_sensor(s_id, sensor_metadata[s_id]) for s_id in sensor_metadata]
 
-    while(time.time() < end_time):
-        target_time = time.time() + sample_delay
-        #print(f"Now: {time.time()}, Target: {target_time}")
+        sample_delay = 1 / sample_freq
+        start_time = time.time()
+        end_time = start_time + (60 * duration)
 
-        responses = query_all(sensors)
-        print(responses)
+        while(time.time() < end_time):
+            target_time = time.time() + sample_delay
+            #print(f"Now: {time.time()}, Target: {target_time}")
 
-        # log to database by id
-        log_data(responses)
+            responses = query_all(sensors)
+            #print(responses)
 
-        # Check if sample collection completed before target time
-        if (time.time() < target_time):
-            print("Hit Target!")
-            time.sleep(target_time - time.time())
-        else:
-            print("Missed Target! :(")
+            # log to database by id
+            log_data(responses)
+
+            # Check if sample collection completed before target time
+            if (time.time() < target_time):
+                print("Hit Target!")
+                time.sleep(target_time - time.time())
+            else:
+                print("Missed Target! :(")
 
     print("Cycle Complete!")
 
@@ -70,5 +73,4 @@ def new_sensor(id, s_type):
 
 def log_data(responses:dict):
     for sensor in responses:
-        #add_measurement
-        pass
+        print(sensor)

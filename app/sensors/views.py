@@ -8,9 +8,6 @@ from flask import flash
 from app import utils
 from app.ui.forms import AddSensorForm
 
-
-
-
 sensor_routes = Blueprint("sensor_routes", __name__)
 
 @sensor_routes.route("/sensor/")

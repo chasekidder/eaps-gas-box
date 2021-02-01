@@ -22,7 +22,14 @@ def config():
         config = {
             "sample_frequency": form.frequency.data,
             "duration": form.duration.data,
-            "sensor_metadata": {}
+            "sensor_metadata": {
+                0: "MPL3115A2",
+                1: "TEROS12",
+                2: "AWM3300V",
+                3: "ABPxxx",
+                4: "LOX02F",
+                5: "GMP251",
+            }
         }
 
         task = start_cycle.delay(config)
