@@ -17,6 +17,8 @@ Home
                 <div class="form-group">
                     <label for="frequency">Frequency of Samples (per second)</label>
                     <input type="integer" class="form-control" id="frequency" name="frequency" placeholder="1">
+                    <label for="duration">Duration of Measurement Cycle (minutes)</label>
+                    <input type="integer" class="form-control" id="duration" name="duration" placeholder="5">
                 </div>
                 <button type="submit" class="btn btn-primary">Start Measuring!</button>
                 {{ form.csrf_token }}
