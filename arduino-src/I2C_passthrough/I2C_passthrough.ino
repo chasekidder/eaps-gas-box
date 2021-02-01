@@ -34,10 +34,14 @@ constexpr uint8_t UART1_POLL = 0x33;
 // Globals
 char rx_data[64];
 char uart1_data[32];
+char rx_data2[64];
+char uart0_data[32];
 char command[64];
 uint8_t command_code = 0;
 uint8_t uart1_i = 0;
 uint8_t UART1_data_ready = 0;
+uint8_t uart0_i = 0;
+uint8_t UART0_data_ready = 0;
 
 //SDI12
 SDISerial SDI12(SDI12_DATA_PIN);
@@ -156,6 +160,7 @@ void setup() {
 
 void loop() {
     char c;
+    char c2;
     delay(1); 
 
     if (UART1.available() > 1){
@@ -168,6 +173,31 @@ void loop() {
             uart1_i = 0;
             UART1_data_ready = 1;
         }
+    }
+
+    if (Serial.available() > 1){
+        c = Serial.read();
+        rx_data[uart1_i] = c;
+        uart1_i++;
+
+        if(c == '\n'){
+            uart1_data[uart1_i] = '\0';  
+            uart1_i = 0;
+            UART0_data_ready = 1;
+            Serial.println("got cmd");
+        }
+    }
+
+    if (UART0_data_ready == 1){
+        command[0] = '0';
+        command[1] = 'R';
+        command[2] = '0';
+        command[3] = '!';
+        command[4] = '\0';
+        
+        querySDI12();
+        Serial.print(rx_data); 
+        UART0_data_ready = 0;
     }
      
 }

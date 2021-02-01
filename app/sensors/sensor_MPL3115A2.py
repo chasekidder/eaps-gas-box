@@ -72,15 +72,15 @@ class MPL3115A2(Sensor):
 
         # 0x07 (7) Enable data ready events Altitude, Pressure, Temperature
         byteVal = MPL3115A2_PT_DATA_CFG.TDEFE | MPL3115A2_PT_DATA_CFG.PDEFE | MPL3115A2_PT_DATA_CFG.DREM
-        try_io(lambda:self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_PT_DATA_CFG.ADDRESS, byteVal))
+        try_io(lambda: self.bus.write_byte_data(MPL3115A2_I2C_ADDRESS, MPL3115A2_PT_DATA_CFG.ADDRESS, byteVal))
 
     def read_all(self) -> dict:
-        kpa = try_io(lambda:self.read_pressure())
+        kpa = try_io(lambda: self.read_pressure())
         return {
             "barometric_pressure": kpa,
             "altitude": (44330.77 * (1 - pow(((kpa * 1000) / 101326), (0.1902632)))),
-            "temperature_celcius": try_io(lambda:self.read_temperature_c()),
-            "temperature_farenheit": try_io(lambda:self.read_temperature_f())
+            "temperature_celcius": try_io(lambda: self.read_temperature_c()),
+            "temperature_farenheit": try_io(lambda: self.read_temperature_f())
         }
 
     def read_pressure(self) -> float:
