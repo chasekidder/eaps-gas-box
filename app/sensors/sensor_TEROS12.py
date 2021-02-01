@@ -14,6 +14,7 @@ class NANO_I2C_CMD():
     A_READ_A4 = 0x14
     A_READ_A5 = 0x15
     SDI12_READ = 0x20
+    SDI12_POLL = 0x21
     UART0_READ = 0x30
     UART1_READ = 0x31
     UART0_POLL = 0x32
@@ -47,9 +48,9 @@ class TEROS12(Sensor):
         }
 
     def read_sensor(self) -> str:
-        command_string = [ord(c) for c in f"{ self.ADDRESS }R0!\n"]
+        command_string = [ord(c) for c in f"{ self.ADDRESS }R0!"]
         self.bus.write_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.CMD_REG_WRITE, command_string)
-        time.sleep(.01)
+        self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.SDI12_POLL, 1)
         value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.SDI12_READ, 16)
 
         return value
