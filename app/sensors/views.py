@@ -35,4 +35,4 @@ def sensor_add():
     elif request.method == 'POST' and not form.validate():
         flash("Required Field Not Completed!", "alert-warning")
 
-    return render_template("config.html", form=form)
+    return render_template("sensor-add.html", form=form)
