@@ -7,6 +7,7 @@ from flask import flash
 
 from app import utils
 from app.ui.forms import AddSensorForm
+from app.measurement.measure import celery, start_cycle
 
 sensor_routes = Blueprint("sensor_routes", __name__)
 
@@ -35,3 +36,23 @@ def sensor_add():
         flash("Required Field Not Completed!", "alert-warning")
 
     return render_template("sensor-add.html", form=form)
+
+
+@sensor_routes.route("/test/")
+def test():
+    config = {
+            "sample_frequency": 1,
+            "duration": 0.25,
+            "sensor_metadata": {
+                0: "MPL3115A2",
+                1: "TEROS12",
+                2: "AWM3300V",
+                3: "ABPxxx",
+                4: "LOX02F",
+                5: "GMP251",
+            }
+        }
+
+    task = start_cycle.delay(config)
+    async_result = celery.AsyncResult(id=task.task_id, app=celery)
+    return redirect("/live/")
