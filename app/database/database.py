@@ -5,8 +5,8 @@ import datetime
 
 def log_measurement(value, sensor, cycle):
     #TODO: THIS WILL ERROR I NEED THE ID HERE
-    s = getsensorbyid(sensor)
-    m = add_measurement(value, s.id, cycle, sensor)
+    s = models.Sensor.query.get(sensor)
+    m = add_measurement(value, s.data_types, cycle, sensor)
     return m
 
 def add_measurement(value, data_type, cycle, sensor):
@@ -22,18 +22,18 @@ def add_cycle(site: int) -> int:
     db.session.flush()
     return cycle.id
 
-def add_site(name:str)- > int:
+def add_site(name:str) -> int:
     site = models.Site(name)
     db.session.flush()
     return site.id
 
 def add_sensor(name:str, address, data_type:int) -> int:
-    sensor = Sensor(name=name, address=address, data_type_id=data_type)
+    sensor = models.Sensor(name=name, address=address, data_type_id=data_type)
     db.session.flush()
     return sensor.id
 
-def add_data_type():
-    d_type = models.Date_Type(name:str, unit:str)
+def add_data_type(name:str, unit:str):
+    d_type = models.Data_Type(name=name, unit=unit)
     db.session.flush()
     return d_type.id
 

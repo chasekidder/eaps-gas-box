@@ -141,3 +141,4 @@ spy.txt
 docs/
 arduino-src/not_tracked/
 not_tracked/
+.vscode/settings.json

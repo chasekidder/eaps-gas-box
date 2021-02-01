@@ -4,6 +4,7 @@ from app.sensors.sensor_AWM3300V import AWM3300V
 from app.sensors.sensor_TEROS12 import TEROS12
 from app.sensors.sensor_ABPDANN060PGAA5 import ABPxx
 from app.sensors.sensor_LOX02F import LOX02F
+from app.sensors.sensor_GMP251 import GMP251
 
 from celery import Celery
 
@@ -14,7 +15,7 @@ import time
 celery = Celery(broker="redis://localhost:6379/0")
 
 @celery.task(name="measurement.cycle")
-def start_cycle(config:dict=config):
+def start_cycle(config:dict):
     # duration is 1 minute minimum
     sensor_metadata = config["sensor_metadata"]
     sample_freq = config["sample_frequency"]
@@ -63,6 +64,9 @@ def new_sensor(id, s_type):
     
     elif s_type == "LOX02F":
         return LOX02F(id)
+        
+    elif s_type == "GMP251":
+        return GMP251(id)
 
 def log_data(responses:dict):
     for sensor in responses:
