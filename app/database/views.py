@@ -20,8 +20,8 @@ def config():
 
     if request.method == 'POST' and form.validate():
         config = {
-            "sample_frequency": form.frequency,
-            "duration": form.duration,
+            "sample_frequency": form.frequency.data,
+            "duration": form.duration.data,
             "sensor_metadata": {}
         }
 
