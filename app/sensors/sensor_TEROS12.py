@@ -1,4 +1,4 @@
-from app.sensors.sensor_base import Sensor
+from app.sensors.sensor_base import Sensor, try_io
 
 import smbus2
 import time
@@ -35,7 +35,7 @@ class TEROS12(Sensor):
         self.bus = smbus2.SMBus(1)
 
     def read_all(self) -> dict:
-        response = self.read_sensor()
+        response = try_io(lambda: self.read_sensor())
         print(response)
         temperature = response
         e_c = 0
