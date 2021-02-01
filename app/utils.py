@@ -3,7 +3,7 @@ import random
 import datetime
 import re
 
-from app import latest
+from app.frontend import latest
 
 def get_files_in_dir(path:str) -> list:
     return os.listdir(path)
