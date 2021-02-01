@@ -9,26 +9,23 @@ from flask import jsonify
 
 from app import utils
 from app.ui.forms import CycleConfigForm
-import app.measurement.measure
+from app.measurement.measure import celery, start_cycle
+
 
 db_routes = Blueprint("db_routes", __name__)
 
-@db_routes.route("/start/", methods=["GET", "POST"])
-def start():
+@db_routes.route("/config/", methods=["GET", "POST"])
+def config():
     form = CycleConfigForm()
 
     if request.method == 'POST' and form.validate():
-        freq = form.frequency
-        duration = form.duration
-        site_id = form.site_id
-
         config = {
             "sample_frequency": form.frequency,
             "duration": form.duration,
             "sensor_metadata": {}
         }
 
-        task = measure.start_cycle.delay(config)
+        task = start_cycle.delay(config)
         async_result = celery.AsyncResult(id=task.task_id, app=celery)
         
         flash("Success! Configuration sent to box. Measurements Starting...", "alert-success")
