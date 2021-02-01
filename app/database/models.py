@@ -2,10 +2,11 @@ from sqlalchemy import Column, String, Date, Integer, Numeric, BLOB, ForeignKey,
 from sqlalchemy.orm import relationship, backref
 
 from app.frontend import app
-from flask_sqlalchemy import SQLAlchemy
+#from flask_sqlalchemy import SQLAlchemy
 
 # Open the DB Connection
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
+db = app.db
 
 class Measurement(db.Model):
     __tablename__ = "measurements"
