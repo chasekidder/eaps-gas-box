@@ -18,15 +18,20 @@ constexpr uint8_t RS485_TX_PIN = 5;
 
 // I2C COMMAND CODES
 constexpr uint8_t COMMAND_REG = 0x00;
+
 constexpr uint8_t A_READ_A0 = 0x10;
 constexpr uint8_t A_READ_A1 = 0x11;
 constexpr uint8_t A_READ_A2 = 0x12;
 constexpr uint8_t A_READ_A3 = 0x13;
 constexpr uint8_t A_READ_A4 = 0x14;
 constexpr uint8_t A_READ_A5 = 0x15;
+
 constexpr uint8_t SDI12_READ = 0x20;
+constexpr uint8_t SDI12_POLL = 0x21;
+
 constexpr uint8_t UART0_READ = 0x30;
 constexpr uint8_t UART1_READ = 0x31;
+
 constexpr uint8_t UART0_POLL = 0x32;
 constexpr uint8_t UART1_POLL = 0x33;
 
@@ -42,6 +47,9 @@ uint8_t uart1_i = 0;
 uint8_t UART1_data_ready = 0;
 uint8_t uart0_i = 0;
 uint8_t UART0_data_ready = 0;
+
+uint8_t SDI12_read_flag = 0;
+uint8_t UART1_read_flag = 0;
 
 //SDI12
 SDISerial SDI12(SDI12_DATA_PIN);
@@ -100,21 +108,28 @@ void requestEvent(){
             break;   
 
         case SDI12_READ:
-            Serial.println(command);
-            querySDI12();
-            Serial.println(rx_data);
+            Serial.print(rx_data);
             Wire.write(rx_data); 
+            SDI12_read_flag = 0;
             break;  
+
+        case SDI12_POLL:
+            Serial.print(command);
+            Wire.write(0x00);
+            SDI12_read_flag = 1;
+            break;
 
         case UART1_POLL:
             Serial.print(command);
-            UART1.print(command);
+            //UART1.print(command);
             Wire.write(0x00);
+            SDI12_read_flag = 1;
             break; 
 
         case UART1_READ:
             if (UART1_data_ready == 1){
                 Wire.write(uart1_data);  
+                SDI12_read_flag = 0;
             }
             else{
                 Wire.write(0x00);  
@@ -195,9 +210,20 @@ void loop() {
         command[3] = '!';
         command[4] = '\0';
         
-        querySDI12();
-        Serial.print(rx_data); 
-        UART0_data_ready = 0;
+        //querySDI12();
+        //Serial.print(rx_data); 
+        //UART0_data_ready = 0;
+        UART1.print("A\r\n");
+        Serial.print(uart1_data);
     }
+
+    if (SDI12_read_flag == 1){
+        querySDI12();
+    }
+
+    if (UART1_read_flag == 1){
+        UART1.print(command);
+    }
+    
      
 }

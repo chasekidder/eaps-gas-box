@@ -52,5 +52,7 @@ class TEROS12(Sensor):
         self.bus.write_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.CMD_REG_WRITE, command_string)
         self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.SDI12_POLL, 1)
         value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.SDI12_READ, 16)
+        if value[0] == 0x00:
+            value = self.bus.read_i2c_block_data(ARDUINO_NANO_I2C_ADDRESS, NANO_I2C_CMD.SDI12_READ, 16)
 
         return value
