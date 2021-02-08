@@ -42,11 +42,6 @@ class TEROS12(Sensor):
         e_c = 0
         moisture = 0
 
-        return {
-            "temperature": temperature,
-            "electrical_conductivity": e_c,
-            "moisture": moisture
-        }
         return [
             {"measurement": "temperature", "value": temperature, "unit": "celcius"},
             {"measurement": "temperature", "value": e_c, "unit": "percent"},
