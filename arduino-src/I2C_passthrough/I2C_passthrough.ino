@@ -8,6 +8,16 @@
 #define RS486_BAUD 19200
 #define UART1_BAUD 9600
 
+typedef union floatUnion_t {
+    float f;
+    uint8_t bytes[sizeof(float)];
+} Float_t;
+
+typedef union uint16Union_t {
+    uint16_t int16;
+    uint8_t int8[sizeof(uint16_t)]
+} Uint16_t
+
 // PROGRAM CONSTANTS
 constexpr uint8_t I2C_ADDRESS = 0x14;
 constexpr uint8_t SDI12_DATA_PIN = 2;
@@ -35,13 +45,16 @@ constexpr uint8_t UART1_READ = 0x31;
 constexpr uint8_t UART0_POLL = 0x32;
 constexpr uint8_t UART1_POLL = 0x33;
 
+constexpr uint8_t DATA_LEN = 64;
 
 // Globals
-char rx_data[64];
-char uart1_data[32];
-char rx_data2[64];
-char uart0_data[32];
-char command[64];
+uint8_t SDI12_data[12];
+
+char rx_data[DATA_LEN];
+char uart1_data[DATA_LEN];
+char rx_data2[DATA_LEN];
+char uart0_data[DATA_LEN];
+char command[DATA_LEN];
 uint8_t command_code = 0;
 uint8_t uart1_i = 0;
 uint8_t UART1_data_ready = 0;
@@ -59,7 +72,7 @@ AltSoftSerial UART1; // TX 9, RX 8
 
 
 
-void receiveEvent(int bytes){
+void receiveEvent(uint16_t bytes){
     command_code = Wire.read();
 
     if (command_code == COMMAND_REG){
@@ -73,55 +86,72 @@ void receiveEvent(int bytes){
 }
 
 void requestEvent(){
-    uint16_t response = 0;
+    /* Responds to a data request from the I^2C Master. Sends
+     * back requested data based on register requested.
+     * 
+     * Number of bytes sent to Master:
+     *      A_READ_0: 2 bytes
+     *      A_READ_1: 2 bytes
+     *      A_READ_2: 2 bytes
+     *      A_READ_3: 2 bytes
+     *      A_READ_4: 2 bytes
+     *      A_READ_5: 2 bytes
+     *      SDI12_READ: 12 bytes
+     *      SDI12_POLL: 1 byte
+     *      UART1_READ: 12 bytes
+     *      UART1_POLL: 1 byte
+     * 
+     * Returns:
+     *      Void
+     */
+    Uint16_t response = 0;
     
     switch(command_code){
         case A_READ_A0:
             //TODO: make this send 2 bytes instead of one
-            response = readAnalog(14);
-            Wire.write(response);
+            response.int16 = readAnalog(14);
+            Wire.write(response.int8);
             break; 
 
         case A_READ_A1:
-            response = readAnalog(15);
-            Wire.write(response);
+            response.int16 = readAnalog(15);
+            Wire.write(response.int8);
             break;  
 
         case A_READ_A2:
-            response = readAnalog(16);
-            Wire.write(response);
+            response.int16 = readAnalog(16);
+            Wire.write(response.int8);
             break;  
 
         case A_READ_A3:
-            response = readAnalog(17);
-            Wire.write(response);
+            response.int16 = readAnalog(17);
+            Wire.write(response.int8);
             break;  
 
         case A_READ_A4:
-            response = readAnalog(18);
-            Wire.write(response);
+            response.int16 = readAnalog(18);
+            Wire.write(response.int8);
             break;   
 
         case A_READ_A5:
-            response = readAnalog(19);
-            Wire.write(response);
+            response.int16 = readAnalog(19);
+            Wire.write(response.int8);
             break;   
 
         case SDI12_READ:
-            Serial.print(rx_data);
-            Wire.write(rx_data); 
-            SDI12_read_flag = 0;
+            Serial.print(SDI12_data);
+            Wire.write(SDI12_data); 
             break;  
 
         case SDI12_POLL:
-            Serial.print(command);
+            Serial.print("Sending Command: %s", command);
             Wire.write(0x00);
             SDI12_read_flag = 1;
             break;
 
         case UART1_POLL:
-            Serial.print(command);
-            //UART1.print(command);
+            Serial.print("Sending Command: %s", command);
+            UART1.print(command);
             Wire.write(0x00);
             SDI12_read_flag = 1;
             break; 
@@ -144,12 +174,36 @@ void queryUART1(){
 }
 
 void querySDI12(){
+    Float_t temp;
+    Float_t ec;
+    Float_t h2o;
+
     char* resp = SDI12.sdi_query(command, 500);
-    sprintf(rx_data, "%s", resp ? resp:"No response");
+    //sprintf(rx_data, "%s", resp ? resp:"No response");
+    if (resp){
+        sscanf(resp, "%*d%f%f%f", &temp.f, &ec.f, &h2o.f);
+        
+        SDI12_data[0] = temp.bytes[0];
+        SDI12_data[1] = temp.bytes[1];
+        SDI12_data[2] = temp.bytes[2];
+        SDI12_data[3] = temp.bytes[3];
+
+        SDI12_data[4] = ec.bytes[0];
+        SDI12_data[5] = ec.bytes[0];
+        SDI12_data[6] = ec.bytes[0];
+        SDI12_data[7] = ec.bytes[0];
+
+        SDI12_data[8] = h2o.bytes[0];
+        SDI12_data[9] = h2o.bytes[0];
+        SDI12_data[10] = h2o.bytes[0];
+        SDI12_data[11] = h2o.bytes[0];
+            
+        SDI12_read_flag = 0;
+    }
 }
 
-int readAnalog(uint8_t pin){
-    int value = analogRead(pin);
+uint16_t readAnalog(uint8_t pin){
+    uint16_t value = analogRead(pin);
     return value;
 }
 
