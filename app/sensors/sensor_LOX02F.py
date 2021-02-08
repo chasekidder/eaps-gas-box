@@ -25,7 +25,7 @@ class LOX02F(Sensor):
         protocol = "UART"
         address = 14
         measurements = [
-            "oxygen_concentration"
+            "o2_concentration"
         ]
         
         super().__init__(id, type, protocol, address, measurements)
@@ -39,9 +39,9 @@ class LOX02F(Sensor):
 
 
     def read_all(self) -> dict:
-        return {
-            "oxygen_concentration": self.read_oxygen()
-        }
+        return [
+            {"measurement": "o2_concentration", "value": self.read_oxygen(), "unit": "percentage"}
+        ]
 
     def read_oxygen(self) -> float:
         command_string = [ord(c) for c in "A\r\n"] # \r\n may need to be encoded to send as the correct bytes idk

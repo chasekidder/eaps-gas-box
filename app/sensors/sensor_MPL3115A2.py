@@ -76,12 +76,12 @@ class MPL3115A2(Sensor):
 
     def read_all(self) -> dict:
         kpa = try_io(lambda: self.read_pressure())
-        return {
-            "barometric_pressure": kpa,
-            "altitude": (44330.77 * (1 - pow(((kpa * 1000) / 101326), (0.1902632)))),
-            "temperature_celcius": try_io(lambda: self.read_temperature_c()),
-            "temperature_farenheit": try_io(lambda: self.read_temperature_f())
-        }
+        return [
+            {"measurement": "barometric_pressure", "value": kpa, "unit": "kpa"},
+            {"measurement": "altitude", "value": (44330.77 * (1 - pow(((kpa * 1000) / 101326), (0.1902632)))), "unit": "meters"},
+            {"measurement": "temperature_celcius", "value": try_io(lambda: self.read_temperature_c()), "unit": "celcius"},
+            {"measurement": "temperature_farenheit", "value": try_io(lambda: self.read_temperature_f()), "unit": "farenheit"},
+        ]
 
     def read_pressure(self) -> float:
         # 0x39 (57) Active Mode, OSR = 128, Barometer Mode

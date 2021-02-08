@@ -24,16 +24,16 @@ class GMP251(Sensor):
         protocol = "ANALOG"
         address = 14
         measurements = [
-            "carbon_dioxide_concentration"
+            "co2_concentration"
         ]
         
         super().__init__(id, type, protocol, address, measurements)
         self.bus = smbus2.SMBus(1)
 
     def read_all(self) -> dict:
-        return {
-            "carbon_dioxide_concentration": self.read_co2_concentration()
-        }
+        return [
+            {"measurement": "co2_concentration", "value": self.read_co2_concentration(), "unit": "percent"}
+        ]
 
     def read_co2_concentration(self) -> float:
         # TODO: Make sure to receive 2 bytes instead of one because the nano is

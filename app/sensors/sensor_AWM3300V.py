@@ -31,9 +31,9 @@ class AWM3300V(Sensor):
         self.bus = smbus2.SMBus(1)
 
     def read_all(self) -> dict:
-        return {
-            "mass_flow": self.read_mass_flow()
-        }
+        return [
+            {"measurement": "mass_flow", "value": self.read_mass_flow(), "unit": "asdf"}
+        ]
 
     def read_mass_flow(self) -> float:
         # TODO: Make sure to receive 2 bytes instead of one because the nano is

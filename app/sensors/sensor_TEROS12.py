@@ -1,3 +1,4 @@
+from app.database.models import Measurement
 from app.sensors.sensor_base import Sensor, try_io
 
 import smbus2
@@ -46,6 +47,11 @@ class TEROS12(Sensor):
             "electrical_conductivity": e_c,
             "moisture": moisture
         }
+        return [
+            {"measurement": "temperature", "value": temperature, "unit": "celcius"},
+            {"measurement": "temperature", "value": e_c, "unit": "percent"},
+            {"measurement": "temperature", "value": moisture, "unit": "percent"},
+        ]
 
     def read_sensor(self) -> str:
         command_string = [ord(c) for c in f"{ self.ADDRESS }R0!"]

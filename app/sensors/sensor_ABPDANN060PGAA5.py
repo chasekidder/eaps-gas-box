@@ -30,10 +30,10 @@ class ABPxx(Sensor):
         super().__init__(id, type, protocol, address, measurements)
         self.bus = smbus2.SMBus(1)
 
-    def read_all(self) -> dict:
-        return {
-            "pressure": self.read_pressure()
-        }
+    def read_all(self) -> list:
+        return [
+            {"measurement": "pressure", "value": self.read_pressure(), "unit": "mbar"}
+        ]
 
     def read_pressure(self) -> float:
         # TODO: Make sure to receive 2 bytes instead of one because the nano is
