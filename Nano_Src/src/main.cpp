@@ -44,7 +44,7 @@ constexpr uint8_t UART1_READ = 0x31;
 constexpr uint8_t UART0_POLL = 0x32;
 constexpr uint8_t UART1_POLL = 0x33;
 
-constexpr uint8_t MAX_DATA_LEN = 64;
+constexpr uint8_t MAX_DATA_LEN = 32;
 
 // Globals
 
@@ -158,6 +158,14 @@ void requestEvent(){
             Wire.write(analogRegister[7].int8[0]);
             Wire.write(analogRegister[7].int8[1]);
             break;
+
+        case SDI12_POLL:
+            if (SDI12_data_ready){
+                Wire.write(0x01);
+            }
+            else {
+                Wire.write(0x00);
+            }
 
         case SDI12_READ:
             if (SDI12_data_ready){

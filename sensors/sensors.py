@@ -12,15 +12,20 @@ NANO_I2C_ADDR = CONFIG.NANO_I2C_ADDR
 # Arduino Nano I2C Command Registers
 class NANO():
     CMD_REG_WRITE = 0x00
+
     A_READ_A0 = 0x10
     A_READ_A1 = 0x11
     A_READ_A2 = 0x12
     A_READ_A3 = 0x13
     A_READ_A4 = 0x14
     A_READ_A5 = 0x15
+
     SDI12_READ = 0x20
+    SDI12_POLL = 0x021
+
     UART0_READ = 0x30
     UART1_READ = 0x31
+
     UART0_POLL = 0x32
     UART1_POLL = 0x33
 
@@ -308,11 +313,19 @@ class TEROS12(Sensor):
 
 
     def read_sensor(self) -> str:
-        command_string = [ord(c) for c in f"{ self.address }R0!"]
-        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_string)
+        # Write TEROS-12 Command to the Nano's Command Register
+        command_string = f"{ self.address }R0!"
+        command_bytes = [ord(c) for c in command_string]
+        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
+
+        # Poll the Nano for when the reponse is ready
+        response_ready = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_POLL, 1)
+        while (response_ready[0] == 0x00):
+            response_ready = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_POLL, 1)
+
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_READ, 32)
-        while (value[0] == 0x00):
-            time.sleep(0.001)
-            value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_READ, 32)
+        if (value[0] == 0x00):
+            print("0x00 response!")
+            raise()
 
         return value
