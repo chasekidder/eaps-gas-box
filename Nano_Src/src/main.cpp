@@ -165,6 +165,10 @@ void requestEvent(){
                 Wire.write(SDI12_data, MAX_DATA_LEN); 
                 SDI12_data_ready = 0;
             }
+            else if(SDI12_data_requested){
+                //Do nothing because we're waiting for the sensor
+                Wire.write(0x00);
+            }
             else {
                 Wire.write(0x00);
                 SDI12_data_requested = 1;
