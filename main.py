@@ -34,7 +34,7 @@ def loop():
     # Query Sensors
     #responses = {name:sensor.read_all() for (name, sensor) in SENSORS}
     responses = {"gas pressure": SENSORS["gas pressure"].read_all(),
-                "ec": SENSORS["ec"].read_all(),
+                "ec": SENSORS["ec"].read_all(0),
     }
 
     if (time.time() < end):
