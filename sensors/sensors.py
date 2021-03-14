@@ -51,7 +51,7 @@ class ABPxx(Sensor):
     def read_pressure(self) -> float:
         # TODO: Make sure to receive 2 bytes instead of one because the nano is
         # supposed to be sending a 16-bit number!
-        value = self.bus.read_byte_data(NANO_I2C_ADDR, NANO.A_READ_A2)
+        value = self.bus.read_word_data(NANO_I2C_ADDR, NANO.A_READ_A2)
         
         #TODO: manipulate value! the current return is a raw adc 10bit num
         return value
