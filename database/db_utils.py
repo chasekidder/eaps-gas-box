@@ -57,3 +57,5 @@ class Database():
                 print(measurement)
                 self.curs.execute(sql_insert, (sensor, str(measurement["timestamp"]),
                     measurement["type"], measurement["value"], measurement["unit"]))
+
+        self.con.commit()
