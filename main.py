@@ -5,20 +5,20 @@ from config import Config
 import time
 
 CONFIG = None
-SENSORS = []
+
 DB = db_utils.Database()
+
+# Initialize Sensors
+SENSORS = {
+    "gas pressure": sensor.ABPxx()
+
+}
 
 def setup():
     # Open Comms
     # Start WebUI
     # Load Config File
     CONFIG = Config("config.ini")
-
-    # Initialize Sensors
-    SENSORS = {
-        "gas pressure": sensor.ABPxx()
-
-    }
 
     # Backup Data Files
     DB.backup()
@@ -31,7 +31,8 @@ def loop():
     end = start + 1
 
     # Query Sensors
-    responses = {name:sensor.read_all() for (name, sensor) in SENSORS}
+    #responses = {name:sensor.read_all() for (name, sensor) in SENSORS}
+    responses = {"gas pressure": SENSORS["gas pressure"].read_all()}
 
     if (time.time() < end):
             print("Hit Target!")
