@@ -55,7 +55,7 @@ class ABPxx(Sensor):
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.A_READ_A2, 2)
         
         #TODO: manipulate value! the current return is a raw adc 10bit num
-        value = value[1] << 8 & value[0]
+        value = value[1] << 8 | value[0]
 
         return value
 
