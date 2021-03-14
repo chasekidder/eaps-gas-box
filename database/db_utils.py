@@ -11,7 +11,20 @@ DEFAULT_BACKUP_PATH = DEFAULT_PATH + ".sql"
 
 class Database():
     def __init__(self, path:str = DEFAULT_PATH):
-        self.con = sqlite3.connect(path)
+        if (os.path.exists(path)):
+            self.con = sqlite3.connect(path)
+        else:
+            self.con = sqlite3.connect(path)
+            self.con.execute("""CREATE TABLE "measurements" (
+                "id"	INTEGER,
+                "sensor"	TEXT NOT NULL,
+                "timestamp"	TEXT NOT NULL,
+                "type"	TEXT NOT NULL,
+                "value"	REAL NOT NULL,
+                "unit"	TEXT NOT NULL,
+                PRIMARY KEY("id" AUTOINCREMENT)
+            )""")
+
         self.curs = self.con.cursor()
 
     def backup(self, path:str = DEFAULT_BACKUP_PATH):
@@ -41,6 +54,6 @@ class Database():
         for sensor in responses: 
             for measurement in responses[sensor]:
                 # Insert data into database
-                print(sensor + responses[measurement]["timestamp"] + responses[measurement]["type"] + responses[measurement]["value"] + responses[measurement]["unit"])
-                self.curs.execute(sql_insert, sensor, responses[measurement]["timestamp"],
-                    responses[measurement]["type"], responses[measurement]["value"], responses[measurement]["unit"])
+                print(measurement)
+                self.curs.execute(sql_insert, (sensor, measurement["timestamp"],
+                    measurement["type"], measurement["value"], measurement["unit"]))

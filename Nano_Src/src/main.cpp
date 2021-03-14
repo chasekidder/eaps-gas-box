@@ -80,6 +80,7 @@ AltSoftSerial UART1; // TX 9, RX 8
 
 
 
+
 void receiveEvent(int bytes){
     command_code = Wire.read();
 
@@ -91,7 +92,6 @@ void receiveEvent(int bytes){
           }
           command[i] = '\0';
     }
-    Serial.println("i2c recieve");
 }
 
 void requestEvent(){
@@ -128,6 +128,8 @@ void requestEvent(){
         case A_READ_A2:
             Wire.write(analogRegister[2].int8[0]);
             Wire.write(analogRegister[2].int8[1]);
+            Serial.print(analogRegister[2].int16);
+            Serial.print('\n');
             break; 
 
         case A_READ_A3:
@@ -179,7 +181,6 @@ void requestEvent(){
             break; 
       
     }
-    Serial.println("I2C");
 }
 
 void queryUART1(){
@@ -223,6 +224,8 @@ void setup() {
 
   // Discard first analogRead() output
   analogRead(A0);
+
+  
 
 }
 
@@ -275,12 +278,13 @@ void loop() {
     }
 
     // Print values to computer for verification
-    if (UART1_data_ready){
-        //asdf
-        UART1_data_ready = 0;
+    if (UART0_data_ready){
+        Serial.print(analogRegister[2].int16);
+        Serial.print('\n');
+        UART0_data_ready = 0;
     }
 
-
+    
     
     
      
