@@ -91,6 +91,7 @@ void receiveEvent(int bytes){
           }
           command[i] = '\0';
     }
+    Serial.println("i2c recieve");
 }
 
 void requestEvent(){
@@ -178,6 +179,7 @@ void requestEvent(){
             break; 
       
     }
+    Serial.println("I2C");
 }
 
 void queryUART1(){

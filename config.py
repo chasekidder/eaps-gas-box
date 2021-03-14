@@ -17,4 +17,7 @@ class Config():
         self.PATH = os.path.dirname(__file__)
         self.WEBUI_PORT = parser.get("webui", "port")
         self.MEASURE_DURATION = parser.get("measurement", "duration")
-        self.NANO_I2C_ADDR = parser.get("sensors", "nano_i2c_address")
+
+        #self.NANO_I2C_ADDR = int(parser.get("sensors", "nano_i2c_address"))
+        # TEMPORARY: REMOVE LATER
+        self.NANO_I2C_ADDR = 0x14

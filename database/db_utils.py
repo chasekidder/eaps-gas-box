@@ -41,6 +41,6 @@ class Database():
         for sensor in responses: 
             for measurement in responses[sensor]:
                 # Insert data into database
-                print(sensor + measurement["timestamp"] + measurement["type"] + measurement["value"] + measurement["unit"])
-                self.curs.execute(sql_insert, sensor, measurement["timestamp"],
-                    measurement["type"], measurement["value"], measurement["unit"])
+                print(sensor + responses[measurement]["timestamp"] + responses[measurement]["type"] + responses[measurement]["value"] + responses[measurement]["unit"])
+                self.curs.execute(sql_insert, sensor, responses[measurement]["timestamp"],
+                    responses[measurement]["type"], responses[measurement]["value"], responses[measurement]["unit"])
