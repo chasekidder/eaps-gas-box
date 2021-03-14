@@ -309,9 +309,9 @@ class TEROS12(Sensor):
     def read_sensor(self) -> str:
         command_string = [ord(c) for c in f"{ self.address }R0!"]
         self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_string)
-        self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_POLL, 1)
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_READ, 12)
         if value[0] == 0x00:
+            time.sleep(0.001)
             value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_READ, 12)
 
         return value
