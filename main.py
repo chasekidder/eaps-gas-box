@@ -16,8 +16,7 @@ def setup():
 
     # Initialize Sensors
     SENSORS = {
-        "gas pressure": sensor.ABPxx(),
-        "gas flow": sensor.AWM3300V(),
+        "gas pressure": sensor.ABPxx()
 
     }
 
