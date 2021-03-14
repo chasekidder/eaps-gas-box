@@ -44,17 +44,19 @@ constexpr uint8_t UART1_READ = 0x31;
 constexpr uint8_t UART0_POLL = 0x32;
 constexpr uint8_t UART1_POLL = 0x33;
 
-constexpr uint8_t DATA_LEN = 64;
+constexpr uint8_t MAX_DATA_LEN = 64;
 
 // Globals
 
 Uint16_t analogRegister[16] = { 0 };
 
-char SDI12_data[12];
+char SDI12_data[MAX_DATA_LEN];
+uint8_t SDI12_response_length = 0;
+
 char UART0_data[12];
 char UART1_data[12];
 
-char command[DATA_LEN];
+char command[MAX_DATA_LEN];
 uint8_t command_code = 0;
 
 
@@ -160,7 +162,7 @@ void requestEvent(){
         case SDI12_READ:
             if (SDI12_data_ready){
                 Serial.print(SDI12_data);
-                Wire.write(SDI12_data, 12); 
+                Wire.write(SDI12_data, MAX_DATA_LEN); 
                 SDI12_data_ready = 0;
             }
             else {
@@ -275,8 +277,8 @@ void loop() {
     if (!SDI12_data_ready && SDI12_data_requested) {
         char * response;
         Serial.println(command);
-        response = SDI12.sdi_query(command, 500); 
-        Serial.print(response);
+        response = SDI12.sdi_query(command, 250); 
+        
         sprintf(SDI12_data, "%s", response);
         Serial.print(SDI12_data);
         SDI12_data_requested = 0;
@@ -285,7 +287,6 @@ void loop() {
 
     // Print values to computer for verification
     if (UART0_data_ready){
-        Serial.print(analogRegister[2].int16);
         Serial.print('\n');
         UART0_data_ready = 0;
     }
