@@ -161,9 +161,11 @@ void requestEvent(){
             if (SDI12_data_ready){
                 Serial.print(SDI12_data);
                 Wire.write(SDI12_data, 12); 
+                SDI12_data_ready = 0;
             }
             else {
                 Wire.write(0x00);
+                SDI12_data_requested = 1;
             }
             
             break;  
@@ -270,11 +272,15 @@ void loop() {
     }
 
     // Sample the SDI-12 sensors
-    if (!SDI12_data_ready && !SDI12_data_requested) {
+    if (!SDI12_data_ready && SDI12_data_requested) {
         char * response;
-        //response = SDI12.sdi_query("", 250);
-        //ssprintf(); 
-        SDI12_data_requested = 1;
+        Serial.println(command);
+        response = SDI12.sdi_query(command, 500); 
+        Serial.print(response);
+        sprintf(SDI12_data, "%s", response);
+        Serial.print(SDI12_data);
+        SDI12_data_requested = 0;
+        SDI12_data_ready = 1;
     }
 
     // Print values to computer for verification

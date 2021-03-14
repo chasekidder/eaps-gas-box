@@ -280,6 +280,7 @@ class TEROS12(Sensor):
     def read_all(self) -> dict:
         response = self.read_sensor()
         print(response)
+        print(''.join([chr(x) for x in response))
         temperature = 0
         e_c = 0
         moisture = 0
