@@ -272,31 +272,39 @@ class MPL3115A2(Sensor):
         self.bus.write_i2c_block_data(MPL3115A2.I2C_ADDRESS, MPL3115A2.BAR_IN_MSB, data)
 
 class TEROS12(Sensor):
-    def __init__(self, id):
-        type = "TEROS12"
-        protocol = "SDI12"
-        address = 0 # TODO: THIS NEEDS TO BE DYNAMIC!!!
-        measurements = [
-            "temperature",
-            "electrical_conductivity",
-            "moisture"
-        ]
-        
-        super().__init__(id, type, protocol, address, measurements)
+    def __init__(self, address):
+        self.address = address
+
         self.bus = smbus2.SMBus(1)
 
     def read_all(self) -> dict:
-        response = try_io(lambda: self.read_sensor())
+        response = self.read_sensor()
         print(response)
-        temperature = response
+        temperature = 0
         e_c = 0
         moisture = 0
 
         return [
-            {"measurement": "temperature", "value": temperature, "unit": "celcius"},
-            {"measurement": "temperature", "value": e_c, "unit": "percent"},
-            {"measurement": "temperature", "value": moisture, "unit": "percent"},
+            {
+                "timestamp": time.time(),
+                "type": "temperature",
+                "value": temperature,
+                "unit": "celcius",
+            },
+            {
+                "timestamp": time.time(),
+                "type": "electrical conductivity",
+                "value": e_c,
+                "unit": "v",
+            },
+            {
+                "timestamp": time.time(),
+                "type": "moisture",
+                "value": moisture,
+                "unit": "mmhg?",
+            },
         ]
+
 
     def read_sensor(self) -> str:
         command_string = [ord(c) for c in f"{ self.ADDRESS }R0!"]
