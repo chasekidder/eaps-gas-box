@@ -55,5 +55,5 @@ class Database():
             for measurement in responses[sensor]:
                 # Insert data into database
                 print(measurement)
-                self.curs.execute(sql_insert, (sensor, measurement["timestamp"],
+                self.curs.execute(sql_insert, (sensor, str(measurement["timestamp"]),
                     measurement["type"], measurement["value"], measurement["unit"]))
