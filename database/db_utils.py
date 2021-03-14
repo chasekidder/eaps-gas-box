@@ -16,7 +16,7 @@ class Database():
 
     def backup(self, path:str = DEFAULT_BACKUP_PATH):
         with io.open(path, 'w') as f:
-            for linha in self.conn.iterdump():
+            for linha in self.con.iterdump():
                 f.write('%s\n' % linha)
             print('Backup performed successfully.')
 
