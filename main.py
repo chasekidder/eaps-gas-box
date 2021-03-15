@@ -12,7 +12,7 @@ DB = db_utils.Database()
 SENSORS = {
     "gas pressure": sensor.ABPxx(),
     "teros12": sensor.TEROS12(0),
-    "oxygen": sensor.LOX02F(),
+    #"oxygen": sensor.LOX02F(),
 
 }
 
