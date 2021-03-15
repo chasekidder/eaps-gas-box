@@ -380,7 +380,7 @@ void loop() {
     sampleAnalogSensors();
     
     // Check the pump
-    checkPumpPressure();
+    //checkPumpPressure();
     
      
 }
