@@ -114,7 +114,7 @@ class LOX02F(Sensor):
     def __init__(self):
         self.bus = smbus2.SMBus(1)
         time.sleep(0.01)
-        self.__initialize_sensor()
+        #self.__initialize_sensor()
 
     def __initialize_sensor(self):
 
@@ -146,12 +146,12 @@ class LOX02F(Sensor):
         #resp_components = re.split("[+-][\d\.]+", response)
 
         return [
-            {
-                "timestamp": time.time(),
-                "type": "pp02",
-                "value": o2_pressure,
-                "unit": "mbar",
-            },
+            # {
+            #     "timestamp": time.time(),
+            #     "type": "pp02",
+            #     "value": o2_pressure,
+            #     "unit": "mbar",
+            # },
             {
                 "timestamp": time.time(),
                 "type": "oxygen concentration",
