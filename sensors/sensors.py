@@ -123,6 +123,7 @@ class LOX02F(Sensor):
         # Configure to oneshot serial measurement mode
         command_string = [ord(c) for c in "M 1\r\n"] 
         self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_string)
+        print("init sensor")
         self.bus.read_byte_data(NANO_I2C_ADDR, NANO.UART1_INIT)
 
 
@@ -152,6 +153,7 @@ class LOX02F(Sensor):
 
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
         while (value[0] == 0x0F):
+            print("read")
             value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
             time.sleep(0.1)
         print(value)
