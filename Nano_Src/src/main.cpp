@@ -191,7 +191,7 @@ void requestEvent(){
 
         case SDI12_READ:
             if (SDI12_data_ready){
-                Serial.print(SDI12_data);
+                //Serial.print(SDI12_data);
                 Wire.write(SDI12_data, MAX_DATA_LEN); 
                 SDI12_data_ready = 0;
             }
@@ -215,7 +215,7 @@ void requestEvent(){
 
         case UART1_READ:
             if (UART1_data_ready){
-                Serial.print(UART1_data);
+                //Serial.print(UART1_data);
                 Wire.write(UART1_data, MAX_DATA_LEN);    
                 UART1_data_ready = 0;     
             }

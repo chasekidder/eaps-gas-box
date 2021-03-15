@@ -14,7 +14,7 @@ DB = db_utils.Database()
 SENSORS = {
     "gas pressure": sensor.ABPxx(),
     "teros12": sensor.TEROS12(0),
-    #"oxygen": sensor.LOX02F(),
+    "oxygen": sensor.LOX02F(),
     "altitude": sensor.MPL3115A2(),
     "pressure":sensor.ABPxx(),
     "mass flow":sensor.AWM3300V(),
@@ -42,7 +42,7 @@ def loop():
     #responses = {name:sensor.read_all() for (name, sensor) in SENSORS}
     responses = {"gas pressure": SENSORS["gas pressure"].read_all(),
                 "teros12": SENSORS["teros12"].read_all(),
-                #"oxygen": SENSORS["oxygen"].read_all(),
+                "oxygen": SENSORS["oxygen"].read_all(),
                 "altitude": SENSORS["altitude"].read_all(),
                 "pressure": SENSORS["pressure"].read_all(),
                 "mass flow": SENSORS["mass flow"].read_all(),
