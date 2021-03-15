@@ -115,43 +115,53 @@ class GMP251(Sensor):
         return value
 
 class LOX02F(Sensor):
-    def __init__(self, id):
-        type = "LOX02F"
-        protocol = "UART"
-        address = 14
-        measurements = [
-            "o2_concentration"
-        ]
-        
-        super().__init__(id, type, protocol, address, measurements)
+    def __init__(self):
         self.bus = smbus2.SMBus(1)
         self.__initialize_sensor()
 
     def __initialize_sensor(self):
-        command_string = [ord(c) for c in "M 1\r\n"] # \r\n may need to be encoded to send as the correct bytes idk
-        try_io(lambda: self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_string))
-        value = try_io(lambda: self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_POLL, 1))
+        # Configure to oneshot serial measurement mode
+        command_string = [ord(c) for c in "M 1\r\n"] 
+        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_string)
+        self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_POLL, 1)
 
 
     def read_all(self) -> dict:
+        response = self.read_oxygen
+        response = ''.join([chr(x) for x in response])
+        print(response)
+
+        #resp_components = re.split("[+-][\d\.]+", response)
+
         return [
-            {"measurement": "o2_concentration", "value": self.read_oxygen(), "unit": "percentage"}
+            {
+                "timestamp": time.time(),
+                "type": "oxygen concentration",
+                "value": 0,
+                "unit": "percent",
+            },
         ]
+       
 
     def read_oxygen(self) -> float:
-        command_string = [ord(c) for c in "A\r\n"] # \r\n may need to be encoded to send as the correct bytes idk
-        #self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_string)
-        #value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_POLL, 1)
-        #while (value[0] == 0x00):
-        #    time.sleep(.01)
-        #    value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 6)
-        try_io(lambda: self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_string))
-        try_io(lambda: self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_POLL, 1))
-        value = try_io(lambda: self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 16))
+        command_string = "A\r\n"
+        command_bytes = [ord(c) for c in command_string] 
+        
+        # Send command to Nano cmd register
+        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
 
+        # Poll the Nano for when the reponse is ready
+        response_ready = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_POLL, 1)
+        while (response_ready[0] == 0x00):
+            response_ready = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_POLL, 1)
 
-        #TODO: manipulate value! the current return is a raw adc 10bit num
-        return value[0]
+        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
+        if (value[0] == 0x00):
+            print("0x00 response!")
+            raise ValueError
+
+        return value
+
 
 class MPL3115A2(Sensor):
     I2C_ADDRESS = 0x60
