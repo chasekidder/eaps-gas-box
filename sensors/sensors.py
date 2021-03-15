@@ -133,9 +133,9 @@ class LOX02F(Sensor):
 
 
     def read_all(self) -> dict:
-        o2_pressure = self.read_oxygen_pressure()
-        o2_pressure = ''.join([chr(x) for x in o2_pressure])
-        print("Oxygen Pressure:" + str(o2_pressure))
+        # o2_pressure = self.read_oxygen_pressure()
+        # o2_pressure = ''.join([chr(x) for x in o2_pressure])
+        # print("Oxygen Pressure:" + str(o2_pressure))
 
 
         o2_concentration = self.read_oxygen_percent()
