@@ -156,7 +156,6 @@ class LOX02F(Sensor):
             time.sleep(0.1)
         print(value)
 
-        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
         if (value[0] == 0x0F):
             print("0x0F response!")
             raise ValueError
