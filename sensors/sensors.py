@@ -346,6 +346,8 @@ class TEROS12(Sensor):
             value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_READ, 32)
             time.sleep(0.1)
 
+        print(value)
+
         if (value[0] == 0x0F):
             print("0x0F response!")
             print(value)

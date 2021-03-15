@@ -112,7 +112,7 @@ void receiveEvent(int bytes){
               i++;
           }
           command[i] = '\0';
-          Serial.print(command); // I2C breaks if this print isn't here... idk man
+          //Serial.print(command); // I2C breaks if this print isn't here... idk man
     }
 }
 
@@ -365,6 +365,8 @@ void loop() {
     if (UART0_data_ready){
         UART0_data_ready = 0;
     }
+
+    delay(0.01);
 
     // Check the ADC values of the analog sensors
     sampleAnalogSensors();
