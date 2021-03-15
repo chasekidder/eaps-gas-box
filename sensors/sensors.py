@@ -22,7 +22,7 @@ class NANO():
     A_READ_A5 = 0x15
 
     SDI12_READ = 0x20
-    SDI12_POLL = 0x021
+    SDI12_POLL = 0x21
 
     UART0_READ = 0x30
     UART1_READ = 0x31
