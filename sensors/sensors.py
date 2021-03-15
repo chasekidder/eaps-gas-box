@@ -130,6 +130,7 @@ class LOX02F(Sensor):
             time.sleep(0.1)
 
         print("---------------------")
+        value = ''.join([chr(x) for x in value])
         print(value)
 
 
