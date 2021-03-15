@@ -191,18 +191,9 @@ class MPL3115A2(Sensor):
         PDEFE = 0x02
         DREM = 0x04
 
-    def __init__(self, id):
-        type = "MPL3115A2"
-        protocol = "I2C"
+    def __init__(self):
         address = MPL3115A2.I2C_ADDRESS
-        measurements = [
-            "barometric_pressure",
-            "altitude",
-            "temperature_celcius",
-            "temperature_farenheit"
-        ]
-        
-        super().__init__(id, type, protocol, address, measurements)
+
         self.bus = smbus2.SMBus(1)
         self.__initialize_sensor()
 
@@ -211,21 +202,37 @@ class MPL3115A2(Sensor):
         # 0x39 (57) Active Mode, OSR = 128, Barometer Mode
         byteVal = MPL3115A2.CTRL_REG1.OS0 | MPL3115A2.CTRL_REG1.OS1 \
             | MPL3115A2.CTRL_REG1.OS2 | MPL3115A2.CTRL_REG1.SBYB
-        try_io(lambda: self.bus.write_byte_data(MPL3115A2.I2C_ADDRESS, MPL3115A2.CTRL_REG1.ADDRESS, byteVal))
+        self.bus.write_byte_data(MPL3115A2.I2C_ADDRESS, MPL3115A2.CTRL_REG1.ADDRESS, byteVal)
         time.sleep(.001)
 
         # 0x07 (7) Enable data ready events Altitude, Pressure, Temperature
         byteVal = MPL3115A2.PT_DATA_CFG.TDEFE | MPL3115A2.PT_DATA_CFG.PDEFE | MPL3115A2.PT_DATA_CFG.DREM
-        try_io(lambda: self.bus.write_byte_data(MPL3115A2.I2C_ADDRESS, MPL3115A2.PT_DATA_CFG.ADDRESS, byteVal))
+        self.bus.write_byte_data(MPL3115A2.I2C_ADDRESS, MPL3115A2.PT_DATA_CFG.ADDRESS, byteVal)
 
     def read_all(self) -> dict:
         kpa = try_io(lambda: self.read_pressure())
+
         return [
-            {"measurement": "barometric_pressure", "value": kpa, "unit": "kpa"},
-            {"measurement": "altitude", "value": (44330.77 * (1 - pow(((kpa * 1000) / 101326), (0.1902632)))), "unit": "meters"},
-            {"measurement": "temperature_celcius", "value": try_io(lambda: self.read_temperature_c()), "unit": "celcius"},
-            {"measurement": "temperature_farenheit", "value": try_io(lambda: self.read_temperature_f()), "unit": "farenheit"},
+            {
+                "timestamp": time.time(),
+                "type": "barometric pressure",
+                "value": kpa,
+                "unit": "kpa",
+            },
+            {
+                "timestamp": time.time(),
+                "type": "altitude",
+                "value": (44330.77 * (1 - pow(((kpa * 1000) / 101326), (0.1902632)))),
+                "unit": "meters",
+            },
+            {
+                "timestamp": time.time(),
+                "type": "temperature",
+                "value": self.read_temperature_c(),
+                "unit": "celcius",
+            },
         ]
+
 
     def read_pressure(self) -> float:
         # 0x39 (57) Active Mode, OSR = 128, Barometer Mode

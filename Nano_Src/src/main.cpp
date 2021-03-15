@@ -70,6 +70,7 @@ uint8_t UART0_data_requested = 0;
 uint8_t UART1_i = 0;
 uint8_t UART1_data_ready = 0;
 uint8_t UART1_data_requested = 0;
+uint8_t UART1_receiving = 0;
 
 //SDI12
 SDISerial SDI12(11);
@@ -204,7 +205,7 @@ void requestEvent(){
                 Wire.write(0x0F);
             }
             else {
-                if(!UART1_data_requested){
+                if(!UART1_data_requested && !UART1_receiving){
                     UART1_data_requested = 1;
                 }
                 
@@ -260,7 +261,6 @@ void setup() {
 
 void loop() {
     char c;
-    delay(1); 
 
     // Check SW Serial Port
     if (UART1.available() > 1){
@@ -285,16 +285,15 @@ void loop() {
             UART0_data[UART0_i] = '\0';  
             UART0_i = 0;
             UART0_data_ready = 1;
+            UART1_receiving = 0;
         }
     }
 
-    // Check the ADC values of the analog sensors
-    sampleAnalogSensors();
-
     // Sample the UART1 O2 sensor
-    if (!UART1_data_ready && UART1_data_requested) {
+    if (!UART1_data_ready && UART1_data_requested && !UART1_receiving) {
         UART1.print("A\r\n");
         UART1_data_requested = 0;
+        UART1_receiving = 1;
     }
 
     // Sample the SDI-12 sensors
@@ -313,7 +312,8 @@ void loop() {
         UART0_data_ready = 0;
     }
 
-
+    // Check the ADC values of the analog sensors
+    sampleAnalogSensors();
     
     
     

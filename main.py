@@ -13,6 +13,7 @@ SENSORS = {
     "gas pressure": sensor.ABPxx(),
     "teros12": sensor.TEROS12(0),
     "oxygen": sensor.LOX02F(),
+    "altitude": sensor.MPL3115A2(),
 
 }
 
@@ -36,7 +37,8 @@ def loop():
     #responses = {name:sensor.read_all() for (name, sensor) in SENSORS}
     responses = {"gas pressure": SENSORS["gas pressure"].read_all(),
                 "teros12": SENSORS["teros12"].read_all(),
-                "oxygen": SENSORS["oxygen"].read_all(),
+                #"oxygen": SENSORS["oxygen"].read_all(),
+                "altitude": SENSORS["altitude"].read_all(),
     }
 
     if (time.time() < end):
