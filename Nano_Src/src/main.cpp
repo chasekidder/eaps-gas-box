@@ -180,9 +180,7 @@ void requestEvent(){
                 Wire.write(0x0F);
             }
             else {
-                // Serial.println(SDI12_data_ready);
-                // Serial.println(SDI12_data_requested);
-                // Wire.write(0x0F);
+                Wire.write(0x0F);
             }
             
             break;  
