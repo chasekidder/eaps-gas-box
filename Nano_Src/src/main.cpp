@@ -163,10 +163,10 @@ void requestEvent(){
             }
             else if (!SDI12_data_requested){
                 SDI12_data_requested = 1;
-                Wire.write(0xF0);
+                Wire.write(0x02);
             }
             else {
-                Wire.write(0xF0);
+                Wire.write(0x03);
             }
 
         case SDI12_READ:
@@ -177,10 +177,10 @@ void requestEvent(){
             }
             else if(SDI12_data_requested){
                 //Do nothing because we're waiting for the sensor
-                Wire.write(0xF0);
+                Wire.write(0x04);
             }
             else {
-                Wire.write(0xF0);
+                Wire.write(0x05);
             }
             
             break;  
