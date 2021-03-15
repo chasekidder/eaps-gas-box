@@ -121,9 +121,10 @@ class LOX02F(Sensor):
 
     def __initialize_sensor(self):
         # Configure to oneshot serial measurement mode
-        command_string = [ord(c) for c in "M 1\r\n"] 
-        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_string)
-        print("init sensor")
+        command_string = "M 1\r\n"
+        command_bytes = [ord(c) for c in command_string] 
+        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
+        time.sleep(0.01)
         self.bus.read_byte_data(NANO_I2C_ADDR, NANO.UART1_INIT)
 
 
