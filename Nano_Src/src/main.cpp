@@ -92,6 +92,7 @@ void receiveEvent(int bytes){
               i++;
           }
           command[i] = '\0';
+          Serial.print(command); // I2C breaks if this print isn't here... idk man
     }
 }
 

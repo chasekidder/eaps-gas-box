@@ -36,7 +36,7 @@ def loop():
     #responses = {name:sensor.read_all() for (name, sensor) in SENSORS}
     responses = {"gas pressure": SENSORS["gas pressure"].read_all(),
                 "teros12": SENSORS["teros12"].read_all(),
-                #"oxygen": SENSORS["oxygen"].read_all(),
+                "oxygen": SENSORS["oxygen"].read_all(),
     }
 
     if (time.time() < end):
