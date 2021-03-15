@@ -159,7 +159,7 @@ void requestEvent(){
 
         case SDI12_POLL:
             if (SDI12_data_ready){
-                Wire.write(0x01);
+                Wire.write(0x0F);
             }
             else if (!SDI12_data_requested){
                 SDI12_data_requested = 1;
