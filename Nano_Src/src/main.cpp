@@ -130,8 +130,6 @@ void requestEvent(){
         case A_READ_A2:
             Wire.write(analogRegister[2].int8[0]);
             Wire.write(analogRegister[2].int8[1]);
-            Serial.print(analogRegister[2].int16);
-            Serial.print('\n');
             break; 
 
         case A_READ_A3:
@@ -184,14 +182,27 @@ void requestEvent(){
             
             break;  
 
-        case UART1_READ:
+        case UART1_POLL:
             if (UART1_data_ready){
-                Serial.print(UART1_data);
-                Wire.write(UART1_data, 12);    
-                UART1_data_requested = 0;     
+                Wire.write(0x01);
             }
             else {
                 Wire.write(0x00);
+            }
+
+        case UART1_READ:
+            if (UART1_data_ready){
+                Serial.print(UART1_data);
+                Wire.write(UART1_data, MAX_DATA_LEN);    
+                UART1_data_ready = 0;     
+            }
+            else if(UART1_data_requested){
+                //Do nothing because we're waiting for the sensor
+                Wire.write(0x00);
+            }
+            else {
+                Wire.write(0x00);
+                UART1_data_requested = 1;
             }
             
             break; 
@@ -272,7 +283,6 @@ void loop() {
             UART0_data[UART0_i] = '\0';  
             UART0_i = 0;
             UART0_data_ready = 1;
-            Serial.println("got cmd");
         }
     }
 
@@ -280,7 +290,7 @@ void loop() {
     sampleAnalogSensors();
 
     // Sample the UART1 O2 sensor
-    if (!UART1_data_ready && !UART1_data_requested) {
+    if (!UART1_data_ready && UART1_data_requested) {
         UART1.print("A\r\n");
         UART1_data_requested = 1;
     }
@@ -288,11 +298,10 @@ void loop() {
     // Sample the SDI-12 sensors
     if (!SDI12_data_ready && SDI12_data_requested) {
         char * response;
-        Serial.println(command);
         response = SDI12.sdi_query(command, 250); 
         
         sprintf(SDI12_data, "%s", response);
-        Serial.print(SDI12_data);
+
         SDI12_data_requested = 0;
         SDI12_data_ready = 1;
     }
