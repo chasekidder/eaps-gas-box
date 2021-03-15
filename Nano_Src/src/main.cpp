@@ -209,9 +209,6 @@ void requestEvent(){
             
             break;  
 
-        case UART1_INIT:
-            UART1.write(command);
-            Wire.write(0x01);
 
         case UART1_READ:
             if (UART1_data_ready){
@@ -345,7 +342,7 @@ void loop() {
 
     // Sample the UART1 O2 sensor
     if (!UART1_data_ready && UART1_data_requested && !UART1_receiving) {
-        UART1.print("A\r\n");
+        UART1.write(command);
         UART1_data_requested = 0;
         UART1_receiving = 1;
     }
