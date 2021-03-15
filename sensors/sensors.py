@@ -298,7 +298,7 @@ class TEROS12(Sensor):
         response = ''.join([chr(x) for x in response])
 
         resp_components = re.split("([+-][\d\.]+)", response)
-        print(resp_components[0])
+        print(resp_components)
 
         moisture = resp_components[0]
         temperature = resp_components[1]
