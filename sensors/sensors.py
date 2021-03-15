@@ -297,7 +297,7 @@ class TEROS12(Sensor):
         response = self.read_sensor()
         response = ''.join([chr(x) for x in response])
 
-        resp_components = re.split("[+-][\d\.]+", response)
+        resp_components = re.split("([+-][\d\.]+)", response)
         print(resp_components[0])
 
         moisture = resp_components[0]
