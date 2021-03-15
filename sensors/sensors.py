@@ -129,6 +129,8 @@ class LOX02F(Sensor):
             value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
             time.sleep(0.1)
 
+        print(value)
+
 
     def read_all(self) -> dict:
         o2_pressure = self.read_oxygen_pressure()
