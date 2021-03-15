@@ -14,6 +14,9 @@ SENSORS = {
     "teros12": sensor.TEROS12(0),
     "oxygen": sensor.LOX02F(),
     "altitude": sensor.MPL3115A2(),
+    "pressure":sensor.ABPxx(),
+    "mass flow":sensor.AWM3300V(),
+    "co2":sensor.GMP251(),
 
 }
 

@@ -56,11 +56,8 @@ class ABPxx(Sensor):
         ]
 
     def read_pressure(self) -> float:
-        # TODO: Make sure to receive 2 bytes instead of one because the nano is
-        # supposed to be sending a 16-bit number!
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.A_READ_A2, 2)
         
-        #TODO: manipulate value! the current return is a raw adc 10bit num
         value = value[1] << 8 | value[0]
 
         return value
@@ -81,37 +78,30 @@ class AWM3300V(Sensor):
         ]
 
     def read_mass_flow(self) -> float:
-        # TODO: Make sure to receive 2 bytes instead of one because the nano is
-        # supposed to be sending a 16-bit number!
-        value = self.bus.read_byte_data(NANO_I2C_ADDR, NANO.A_READ_A0)
+        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.A_READ_A0, 2)
         
-        #TODO: manipulate value! the current return is a raw adc 10bit num
+        value = value[1] << 8 | value[0]
         return value
 
 class GMP251(Sensor):
     def __init__(self, id):
-        type = "GMP251"
-        protocol = "ANALOG"
-        address = 14
-        measurements = [
-            "co2_concentration"
-        ]
-        
-        super().__init__(id, type, protocol, address, measurements)
         self.bus = smbus2.SMBus(1)
 
     def read_all(self) -> dict:
-        return {
-            "sensor":self.name,
-            "data":{"measurement": "co2_concentration", "value": self.read_co2_concentration(), "unit": "percent"}
-        }
+        return [
+            {
+                "timestamp": time.time(),
+                "type": "co2 concentration", 
+                "value": self.read_mass_flow(), 
+                "unit": "percent"
+            }
+        ]
+
 
     def read_co2_concentration(self) -> float:
-        # TODO: Make sure to receive 2 bytes instead of one because the nano is
-        # supposed to be sending a 16-bit number!
-        value = self.bus.read_byte_data(NANO_I2C_ADDR, NANO.A_READ_A1)
+        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.A_READ_A3, 2)
         
-        #TODO: manipulate value! the current return is a raw adc 10bit num
+        value = value[1] << 8 | value[0]
         return value
 
 class LOX02F(Sensor):
