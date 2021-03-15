@@ -107,7 +107,7 @@ class GMP251(Sensor):
     def read_co2_concentration(self) -> float:
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.A_READ_A3, 2)
         
-        value = (((value[1] << 8 | value[0]) / 1024) * 20000) 
+        value = (((value[1] << 8 | value[0]) / 1024) * 200000) 
         
         return value
 
