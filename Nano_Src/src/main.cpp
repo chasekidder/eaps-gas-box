@@ -210,6 +210,11 @@ void requestEvent(){
             
             break;  
 
+        case UART1_INIT:
+            UART1.print("M 1\r\n");
+            Wire.write(0x01);
+            break;
+
 
         case UART1_READ:
             if (UART1_data_ready){

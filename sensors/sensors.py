@@ -125,14 +125,10 @@ class LOX02F(Sensor):
         # Send command to Nano cmd register
         self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
 
-        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
+        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_INIT, 1)
         while (value[0] == 0x01):
-            value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
+            value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_INIT, 1)
             time.sleep(0.1)
-
-        print("---------------------")
-        value = ''.join([chr(x) for x in value])
-        print(value)
         pass
 
 
