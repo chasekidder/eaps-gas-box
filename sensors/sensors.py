@@ -127,7 +127,7 @@ class LOX02F(Sensor):
 
 
     def read_all(self) -> dict:
-        response = self.read_oxygen
+        response = self.read_oxygen()
         response = ''.join([chr(x) for x in response])
         print(response)
 
@@ -143,7 +143,7 @@ class LOX02F(Sensor):
         ]
        
 
-    def read_oxygen(self) -> float:
+    def read_oxygen(self) -> str:
         command_string = "A\r\n"
         command_bytes = [ord(c) for c in command_string] 
         
