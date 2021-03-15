@@ -48,6 +48,7 @@ class Sensor():
 class ABPxx(Sensor):
     def __init__(self):
         self.bus = smbus2.SMBus(1)
+        time.sleep(0.01)
 
     def read_all(self) -> list:
         return [
@@ -70,6 +71,7 @@ class ABPxx(Sensor):
 class AWM3300V(Sensor):
     def __init__(self):
         self.bus = smbus2.SMBus(1)
+        time.sleep(0.01)
 
     def read_all(self) -> dict:
         return [
@@ -90,6 +92,7 @@ class AWM3300V(Sensor):
 class GMP251(Sensor):
     def __init__(self):
         self.bus = smbus2.SMBus(1)
+        time.sleep(0.01)
 
     def read_all(self) -> dict:
         return [
@@ -110,6 +113,7 @@ class GMP251(Sensor):
 class LOX02F(Sensor):
     def __init__(self):
         self.bus = smbus2.SMBus(1)
+        time.sleep(0.01)
         self.__initialize_sensor()
 
     def __initialize_sensor(self):
@@ -188,6 +192,7 @@ class MPL3115A2(Sensor):
         address = MPL3115A2.I2C_ADDRESS
 
         self.bus = smbus2.SMBus(1)
+        time.sleep(0.01)
         self.__initialize_sensor()
 
     def __initialize_sensor(self):
@@ -295,6 +300,7 @@ class TEROS12(Sensor):
         self.address = address
 
         self.bus = smbus2.SMBus(1)
+        time.sleep(0.01)
 
     def read_all(self) -> dict:
         response = self.read_sensor()

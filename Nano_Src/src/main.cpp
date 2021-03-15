@@ -273,7 +273,7 @@ void sampleAnalogSensors(){
 
 void checkPumpPressure(){
     int pressure = 0;
-    pressure = (((analogRegister[2].int16 - (5*0.1)) * 60) / (0.8 * 5));
+    pressure = ((analogRegister[2].int16 * 60) / (4));
 
     if (pressure < 15){
         pumpActive = 0;
@@ -370,7 +370,7 @@ void loop() {
     sampleAnalogSensors();
     
     // Check the pump
-    checkPumpPressure();
+    //checkPumpPressure();
     
      
 }
