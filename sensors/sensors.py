@@ -1,5 +1,6 @@
 import smbus2
 import time
+import re
 
 from config import Config
 from sensors.utils import try_io
@@ -284,11 +285,14 @@ class TEROS12(Sensor):
 
     def read_all(self) -> dict:
         response = self.read_sensor()
-        print(response)
-        print(''.join([chr(x) for x in response]))
-        temperature = 0
-        e_c = 0
-        moisture = 0
+        response = ''.join([chr(x) for x in response])
+
+        resp_components = re.split("[+-][\d\.]+", response)
+
+        moisture = resp_components[0]
+        temperature = resp_components[1]
+        e_c = resp_components[2]
+        
 
         return [
             {
@@ -301,13 +305,13 @@ class TEROS12(Sensor):
                 "timestamp": time.time(),
                 "type": "electrical conductivity",
                 "value": e_c,
-                "unit": "v",
+                "unit": "mS/cm",
             },
             {
                 "timestamp": time.time(),
-                "type": "moisture",
+                "type": "volumetric water content",
                 "value": moisture,
-                "unit": "mmhg?",
+                "unit": "calibrated counts VWC",
             },
         ]
 
@@ -326,6 +330,6 @@ class TEROS12(Sensor):
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_READ, 32)
         if (value[0] == 0x00):
             print("0x00 response!")
-            raise()
+            raise ValueError
 
         return value
