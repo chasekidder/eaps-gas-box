@@ -174,7 +174,7 @@ class LOX02F(Sensor):
         return value
 
     def read_oxygen_percent(self) -> float:
-        command_string = "O\r\n"
+        command_string = "P\r\n"
         command_bytes = [ord(c) for c in command_string] 
         
         # Send command to Nano cmd register
