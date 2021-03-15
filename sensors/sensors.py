@@ -64,7 +64,7 @@ class ABPxx(Sensor):
 
 
 class AWM3300V(Sensor):
-    def __init__(self, name):
+    def __init__(self):
         self.bus = smbus2.SMBus(1)
 
     def read_all(self) -> dict:
@@ -84,7 +84,7 @@ class AWM3300V(Sensor):
         return value
 
 class GMP251(Sensor):
-    def __init__(self, id):
+    def __init__(self):
         self.bus = smbus2.SMBus(1)
 
     def read_all(self) -> dict:
