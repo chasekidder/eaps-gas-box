@@ -311,10 +311,6 @@ void setup() {
 
     // init o2
   UART1.print("M 1\r\n");
-    while (UART1.available() > 1){
-        UART1.read();
-        delay(0.01);
-    }
 
 }
 

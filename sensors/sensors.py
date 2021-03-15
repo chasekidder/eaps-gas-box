@@ -126,7 +126,7 @@ class LOX02F(Sensor):
         self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
 
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
-        while (value[0] == 0x0F):
+        while (value[0] == 0x01):
             value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
             time.sleep(0.1)
 
