@@ -177,12 +177,12 @@ void requestEvent(){
             }
             else if(SDI12_data_requested){
                 //Do nothing because we're waiting for the sensor
-                Wire.write(0x04);
+                Wire.write(0x0F);
             }
             else {
                 Serial.println(SDI12_data_ready);
                 Serial.println(SDI12_data_requested);
-                Wire.write(0x05);
+                Wire.write(0x0F);
             }
             
             break;  
