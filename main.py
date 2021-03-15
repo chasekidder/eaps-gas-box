@@ -68,5 +68,8 @@ def clean_up():
 
 if __name__ == "__main__":
     setup()
-    loop()
+    i = 0
+    while (i < 10):
+        loop()
+        i = i + 1
     clean_up()

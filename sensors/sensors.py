@@ -108,6 +108,7 @@ class GMP251(Sensor):
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.A_READ_A3, 2)
         
         value = value[1] << 8 | value[0]
+        
         return value
 
 class LOX02F(Sensor):
