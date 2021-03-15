@@ -41,8 +41,7 @@ constexpr uint8_t SDI12_POLL = 0x21;
 constexpr uint8_t UART0_READ = 0x30;
 constexpr uint8_t UART1_READ = 0x31;
 
-constexpr uint8_t UART0_POLL = 0x32;
-constexpr uint8_t UART1_POLL = 0x33;
+constexpr uint8_t UART1_INIT = 0x33;
 
 constexpr uint8_t MAX_DATA_LEN = 32;
 
@@ -189,13 +188,9 @@ void requestEvent(){
             
             break;  
 
-        // case UART1_POLL:
-        //     if (UART1_data_ready){
-        //         Wire.write(0x01);
-        //     }
-        //     else {
-        //         Wire.write(0xF0);
-        //     }
+        case UART1_INIT:
+            UART1.write(command);
+            Wire.write(0x01);
 
         case UART1_READ:
             if (UART1_data_ready){
@@ -302,7 +297,7 @@ void loop() {
     // Sample the UART1 O2 sensor
     if (!UART1_data_ready && UART1_data_requested) {
         UART1.print("A\r\n");
-        UART1_data_requested = 1;
+        UART1_data_requested = 0;
     }
 
     // Sample the SDI-12 sensors
@@ -318,9 +313,9 @@ void loop() {
 
     // Print values to computer for verification
     if (UART0_data_ready){
-        Serial.print('\n');
         UART0_data_ready = 0;
     }
+
 
     
     

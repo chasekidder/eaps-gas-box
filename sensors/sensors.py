@@ -28,7 +28,7 @@ class NANO():
     UART1_READ = 0x31
 
     UART0_POLL = 0x32
-    UART1_POLL = 0x33
+    UART1_INIT = 0x33
 
 class Sensor():
     def __init__(self):
@@ -123,7 +123,7 @@ class LOX02F(Sensor):
         # Configure to oneshot serial measurement mode
         command_string = [ord(c) for c in "M 1\r\n"] 
         self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_string)
-        self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_POLL, 1)
+        self.bus.read_byte_data(NANO_I2C_ADDR, NANO.UART1_INIT)
 
 
     def read_all(self) -> dict:
