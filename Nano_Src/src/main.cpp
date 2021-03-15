@@ -85,6 +85,7 @@ uint8_t UART1_i = 0;
 uint8_t UART1_data_ready = 0;
 uint8_t UART1_data_requested = 0;
 uint8_t UART1_receiving = 0;
+uint8_t UART1_init = 1;
 
 //SDI12
 SDISerial SDI12(11);
@@ -308,9 +309,12 @@ void setup() {
 
   pinMode(pumpPin, OUTPUT);
 
-  // Init o2 sensors
+    // init o2
   UART1.print("M 1\r\n");
-  delay(0.05);
+    while (UART1.available() > 1){
+        UART1.read();
+        delay(0.01);
+    }
 
 }
 
@@ -347,7 +351,7 @@ void loop() {
     // Sample the UART1 O2 sensor
     if (!UART1_data_ready && UART1_data_requested && !UART1_receiving) {
         Serial.println(command);
-        UART1.write("P\r\n");
+        UART1.write(command);
         UART1_data_requested = 0;
         UART1_receiving = 1;
     }

@@ -117,30 +117,29 @@ class LOX02F(Sensor):
         self.__initialize_sensor()
 
     def __initialize_sensor(self):
-        # FOR SOME REASON THE COMMANDS WONT GO THROUGH
 
-        # # Configure to oneshot serial measurement mode
-        # command_string = "M 1\r\n"
-        # command_bytes = [ord(c) for c in command_string] 
+        # Configure to oneshot serial measurement mode
+        command_string = "M 1\r\n"
+        command_bytes = [ord(c) for c in command_string] 
 
-        # # Send command to Nano cmd register
-        # self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
+        # Send command to Nano cmd register
+        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
 
-        # value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
-        # while (value[0] == 0x0F):
-        #     value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
-        #     time.sleep(0.1)
+        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
+        while (value[0] == 0x0F):
+            value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
+            time.sleep(0.1)
 
-        # print("---------------------")
-        # value = ''.join([chr(x) for x in value])
-        # print(value)
+        print("---------------------")
+        value = ''.join([chr(x) for x in value])
+        print(value)
         pass
 
 
     def read_all(self) -> dict:
-        # o2_pressure = self.read_oxygen_pressure()
-        # o2_pressure = ''.join([chr(x) for x in o2_pressure])
-        # print("Oxygen Pressure:" + str(o2_pressure))
+        o2_pressure = self.read_oxygen_pressure()
+        o2_pressure = ''.join([chr(x) for x in o2_pressure])
+        print("Oxygen Pressure:" + str(o2_pressure))
 
 
         o2_concentration = self.read_oxygen_percent()
@@ -151,12 +150,12 @@ class LOX02F(Sensor):
         #resp_components = re.split("[+-][\d\.]+", response)
 
         return [
-            # {
-            #     "timestamp": time.time(),
-            #     "type": "pp02",
-            #     "value": o2_pressure,
-            #     "unit": "mbar",
-            # },
+            {
+                "timestamp": time.time(),
+                "type": "pp02",
+                "value": o2_pressure,
+                "unit": "mbar",
+            },
             {
                 "timestamp": time.time(),
                 "type": "oxygen concentration",
@@ -186,11 +185,11 @@ class LOX02F(Sensor):
         return value
 
     def read_oxygen_percent(self) -> float:
-        # command_string = "P\r\n"
-        # command_bytes = [ord(c) for c in command_string] 
+        command_string = "P\r\n"
+        command_bytes = [ord(c) for c in command_string] 
         
-        # # Send command to Nano cmd register
-        # self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
+        # Send command to Nano cmd register
+        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
 
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
         while (value[0] == 0x0F):
