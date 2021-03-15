@@ -42,6 +42,10 @@ def loop():
                 "teros12": SENSORS["teros12"].read_all(),
                 #"oxygen": SENSORS["oxygen"].read_all(),
                 "altitude": SENSORS["altitude"].read_all(),
+                "pressure": SENSORS["pressure"].read_all(),
+                "mass flow": SENSORS["mass flow"].read_all(),
+                "co2": SENSORS["co2"].read_all(),
+
     }
 
     if (time.time() < end):
