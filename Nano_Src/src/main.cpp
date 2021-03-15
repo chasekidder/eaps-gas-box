@@ -215,10 +215,6 @@ void requestEvent(){
     }
 }
 
-void queryUART1(){
-    UART1.print(command);  
-}
-
 
 
 uint16_t readAnalog(uint8_t pin){
