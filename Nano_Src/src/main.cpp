@@ -308,6 +308,10 @@ void setup() {
 
   pinMode(pumpPin, OUTPUT);
 
+  // Init o2 sensors
+  UART1.print("M 1\r\n");
+  delay(0.05);
+
 }
 
 void loop() {
@@ -342,13 +346,15 @@ void loop() {
 
     // Sample the UART1 O2 sensor
     if (!UART1_data_ready && UART1_data_requested && !UART1_receiving) {
-        UART1.write(command);
+        Serial.println(command);
+        UART1.write("P\r\n");
         UART1_data_requested = 0;
         UART1_receiving = 1;
     }
 
     // Sample the SDI-12 sensors
     if (!SDI12_data_ready && SDI12_data_requested) {
+        Serial.println(command);
         char * response;
         response = SDI12.sdi_query(command, 250); 
         
@@ -369,7 +375,7 @@ void loop() {
     sampleAnalogSensors();
     
     // Check the pump
-    //checkPumpPressure();
+    checkPumpPressure();
     
      
 }
