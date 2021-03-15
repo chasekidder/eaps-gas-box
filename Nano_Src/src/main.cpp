@@ -180,6 +180,10 @@ void requestEvent(){
                 Wire.write(0x0F);
             }
             else {
+                if(!SDI12_data_requested){
+                    SDI12_data_requested = 1;
+                }
+                
                 Wire.write(0x0F);
             }
             
