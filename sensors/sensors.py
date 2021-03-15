@@ -145,12 +145,12 @@ class LOX02F(Sensor):
                 "value": o2_pressure,
                 "unit": "mbar",
             },
-            {
-                "timestamp": time.time(),
-                "type": "oxygen concentration",
-                "value": o2_concentration,
-                "unit": "percent",
-            },
+            # {
+            #     "timestamp": time.time(),
+            #     "type": "oxygen concentration",
+            #     "value": o2_concentration,
+            #     "unit": "percent",
+            # },
         ]
        
 
