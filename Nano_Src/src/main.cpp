@@ -173,10 +173,10 @@ void requestEvent(){
             }
             else if(SDI12_data_requested){
                 //Do nothing because we're waiting for the sensor
-                Wire.write(0x00);
+                Wire.write(0xF0);
             }
             else {
-                Wire.write(0x00);
+                Wire.write(0xF0);
                 SDI12_data_requested = 1;
             }
             
@@ -187,7 +187,7 @@ void requestEvent(){
                 Wire.write(0x01);
             }
             else {
-                Wire.write(0x00);
+                Wire.write(0xF0);
             }
 
         case UART1_READ:
@@ -198,10 +198,10 @@ void requestEvent(){
             }
             else if(UART1_data_requested){
                 //Do nothing because we're waiting for the sensor
-                Wire.write(0x00);
+                Wire.write(0xF0);
             }
             else {
-                Wire.write(0x00);
+                Wire.write(0xF0);
                 UART1_data_requested = 1;
             }
             
