@@ -161,8 +161,12 @@ void requestEvent(){
             if (SDI12_data_ready){
                 Wire.write(0x01);
             }
+            else if (!SDI12_data_requested){
+                SDI12_data_requested = 1;
+                Wire.write(0xF0);
+            }
             else {
-                Wire.write(0x00);
+                Wire.write(0xF0);
             }
 
         case SDI12_READ:
@@ -177,7 +181,6 @@ void requestEvent(){
             }
             else {
                 Wire.write(0xF0);
-                SDI12_data_requested = 1;
             }
             
             break;  
