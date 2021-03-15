@@ -126,9 +126,15 @@ class LOX02F(Sensor):
 
 
     def read_all(self) -> dict:
-        response = self.read_oxygen()
-        response = ''.join([chr(x) for x in response])
-        print(response)
+        o2_pressure = self.read_oxygen_pressure()
+        o2_pressure = ''.join([chr(x) for x in o2_pressure])
+        print("Oxygen Pressure:" + str(o2_pressure))
+
+
+        o2_concentration = self.read_oxygen_percent()
+        o2_concentration = ''.join([chr(x) for x in o2_concentration])
+        print("Oxygen Concentration:" + str(o2_concentration))
+
 
         #resp_components = re.split("[+-][\d\.]+", response)
 
@@ -136,13 +142,13 @@ class LOX02F(Sensor):
             {
                 "timestamp": time.time(),
                 "type": "pp02",
-                "value": self.read_oxygen_pressure(),
+                "value": o2_pressure,
                 "unit": "mbar",
             },
             {
                 "timestamp": time.time(),
                 "type": "oxygen concentration",
-                "value": self.read_oxygen_percent(),
+                "value": o2_concentration,
                 "unit": "percent",
             },
         ]
