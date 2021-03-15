@@ -92,11 +92,10 @@ class GMP251(Sensor):
             {
                 "timestamp": time.time(),
                 "type": "co2 concentration", 
-                "value": self.read_mass_flow(), 
+                "value": self.read_co2_concentration(), 
                 "unit": "percent"
             }
         ]
-
 
     def read_co2_concentration(self) -> float:
         value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.A_READ_A3, 2)
