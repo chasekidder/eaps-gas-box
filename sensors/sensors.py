@@ -298,7 +298,6 @@ class TEROS12(Sensor):
         response = ''.join([chr(x) for x in response])
 
         resp_components = re.findall("([+-][\d\.]+)", response)
-        print(resp_components)
 
         moisture = float(resp_components[0])
         temperature = float(resp_components[1])
@@ -337,7 +336,6 @@ class TEROS12(Sensor):
         while (value[0] == 0x0F):
             value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_READ, 32)
             time.sleep(0.1)
-        print(value)
 
         if (value[0] == 0x0F):
             print("0x0F response!")

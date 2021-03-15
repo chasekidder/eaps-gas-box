@@ -157,17 +157,17 @@ void requestEvent(){
             Wire.write(analogRegister[7].int8[1]);
             break;
 
-        case SDI12_POLL:
-            if (SDI12_data_ready){
-                Wire.write(0x0F);
-            }
-            else if (!SDI12_data_requested){
-                SDI12_data_requested = 1;
-                Wire.write(0x02);
-            }
-            else {
-                Wire.write(0x03);
-            }
+        // case SDI12_POLL:
+        //     if (SDI12_data_ready){
+        //         Wire.write(0x0F);
+        //     }
+        //     else if (!SDI12_data_requested){
+        //         SDI12_data_requested = 1;
+        //         Wire.write(0x02);
+        //     }
+        //     else {
+        //         Wire.write(0x03);
+        //     }
 
         case SDI12_READ:
             if (SDI12_data_ready){
@@ -189,13 +189,13 @@ void requestEvent(){
             
             break;  
 
-        case UART1_POLL:
-            if (UART1_data_ready){
-                Wire.write(0x01);
-            }
-            else {
-                Wire.write(0xF0);
-            }
+        // case UART1_POLL:
+        //     if (UART1_data_ready){
+        //         Wire.write(0x01);
+        //     }
+        //     else {
+        //         Wire.write(0xF0);
+        //     }
 
         case UART1_READ:
             if (UART1_data_ready){
@@ -205,11 +205,14 @@ void requestEvent(){
             }
             else if(UART1_data_requested){
                 //Do nothing because we're waiting for the sensor
-                Wire.write(0xF0);
+                Wire.write(0x0F);
             }
             else {
-                Wire.write(0xF0);
-                UART1_data_requested = 1;
+                if(!UART1_data_requested){
+                    UART1_data_requested = 1;
+                }
+                
+                Wire.write(0x0F);
             }
             
             break; 
