@@ -14,12 +14,14 @@ NANO_I2C_ADDR = CONFIG.NANO_I2C_ADDR
 class NANO():
     CMD_REG_WRITE = 0x00
 
-    A_READ_A0 = 0x10
+    A_READ_A0 = 0x10 
     A_READ_A1 = 0x11
-    A_READ_A2 = 0x12
-    A_READ_A3 = 0x13
-    A_READ_A4 = 0x14
-    A_READ_A5 = 0x15
+    A_READ_A2 = 0x12 # ABPxx Pressure Sensor
+    A_READ_A3 = 0x13 # GMP 251 CO2 Sensor
+    A_READ_A4 = 0x14 # I2C SCL
+    A_READ_A5 = 0x15 # I2C SDA
+    A_READ_A6 = 0x16 
+    A_READ_A7 = 0x17 # AWM3300V Mass Flow Sensor
 
     SDI12_READ = 0x20
     SDI12_POLL = 0x21
@@ -29,6 +31,8 @@ class NANO():
 
     UART0_POLL = 0x32
     UART1_INIT = 0x33
+
+    PUMP_CTRL_REG = 0x50
 
 class Sensor():
     def __init__(self):
@@ -78,7 +82,7 @@ class AWM3300V(Sensor):
         ]
 
     def read_mass_flow(self) -> float:
-        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.A_READ_A0, 2)
+        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.A_READ_A7, 2)
         
         value = value[1] << 8 | value[0]
         return value

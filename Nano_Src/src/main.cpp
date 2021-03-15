@@ -2,6 +2,7 @@
 #include <SDISerial.h>
 #include <AltSoftSerial.h>
 #include <Wire.h>
+//#include <Adafruit_GPS.h>
 
 #define BAUD 115200
 #define MY_DEBUG true
@@ -43,6 +44,20 @@ constexpr uint8_t UART1_READ = 0x31;
 
 constexpr uint8_t UART1_INIT = 0x33;
 
+constexpr uint8_t GPS_DAY = 0x40;
+constexpr uint8_t GPS_MONTH = 0x41;
+constexpr uint8_t GPS_YEAR = 0x42;
+constexpr uint8_t GPS_HOUR = 0x43;
+constexpr uint8_t GPS_MINUTE = 0x44;
+constexpr uint8_t GPS_SECOND = 0x45;
+constexpr uint8_t GPS_MILLISECOND = 0x46;
+constexpr uint8_t GPS_LATITUDE = 0x47;
+constexpr uint8_t GPS_LONGITUDE = 0x48;
+constexpr uint8_t GPS_ANGLE = 0x49;
+constexpr uint8_t GPS_ALTITUDE = 0x4A;
+
+constexpr uint8_t PUMP_CTRL_REG = 0x50;
+
 constexpr uint8_t MAX_DATA_LEN = 32;
 
 // Globals
@@ -58,8 +73,7 @@ char UART1_data[12];
 char command[MAX_DATA_LEN];
 uint8_t command_code = 0;
 
-
-uint8_t uart0_i = 0;
+Uint16_t GPS_data[MAX_DATA_LEN] = { 0 };
 
 // UART0
 uint8_t UART0_i = 0;
@@ -80,7 +94,12 @@ uint8_t SDI12_data_requested = 0;
 //UART1
 AltSoftSerial UART1; // TX 9, RX 8
 
+//GPS
+//Adafruit_GPS GPS(&Wire);
 
+// Pump Control
+uint8_t pumpPin = 9;
+uint8_t pumpActive = 1;
 
 
 void receiveEvent(int bytes){
@@ -108,9 +127,9 @@ void requestEvent(){
      *      A_READ_3: 2 bytes
      *      A_READ_4: 2 bytes
      *      A_READ_5: 2 bytes
-     *      SDI12_READ: 12 bytes
+     *      SDI12_READ: 32 bytes
      *      SDI12_POLL: 1 byte
-     *      UART1_READ: 12 bytes
+     *      UART1_READ: 32 bytes
      *      UART1_POLL: 1 byte
      * 
      * Returns:
@@ -234,6 +253,36 @@ void sampleAnalogSensors(){
 
 }
 
+// void GPS_init(){
+//     // Output RMC + GGA Data
+//     GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA); 
+
+//     // Set update rate
+//     GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); 
+// }
+
+// void queryGPS(){
+//     // Recieve and parse newest NMEA message
+//     if (GPS.newNMEAreceived()) {
+//         GPS.lastNMEA(); 
+//         if (!GPS.parse(GPS.lastNMEA())) return; 
+//     }
+//     Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
+//     Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
+// }
+
+void checkPumpPressure(){
+    int pressure = 0;
+    pressure = (((analogRegister[2].int16 - (5*0.1)) * 60) / (0.8 * 5));
+
+    if (pressure < 15){
+        pumpActive = 0;
+    }
+    else pumpActive = 1;
+
+    digitalWrite(pumpPin, pumpActive);
+}
+
 void setup() {
   // Debug configuration
   if (MY_DEBUG){
@@ -252,10 +301,15 @@ void setup() {
   // Setup UART1 Communications
   UART1.begin(UART1_BAUD);
 
+  // Setup GPS Communications
+  //GPS.begin(0x10);
+  //GPS_init();
+  //queryGPS();
+
   // Discard first analogRead() output
   analogRead(A0);
 
-  
+  pinMode(pumpPin, OUTPUT);
 
 }
 
@@ -315,7 +369,8 @@ void loop() {
     // Check the ADC values of the analog sensors
     sampleAnalogSensors();
     
-    
+    // Check the pump
+    checkPumpPressure();
     
      
 }

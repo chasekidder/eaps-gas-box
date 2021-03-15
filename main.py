@@ -2,6 +2,8 @@ from database import db_utils
 import sensors.sensors as sensor
 from config import Config
 
+from sensors.sensors import NANO
+
 import time
 
 CONFIG = None
