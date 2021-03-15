@@ -300,9 +300,9 @@ class TEROS12(Sensor):
         resp_components = re.findall("([+-][\d\.]+)", response)
         print(resp_components)
 
-        moisture = int(resp_components[0])
-        temperature = int(resp_components[1])
-        e_c = int(resp_components[2])
+        moisture = float(resp_components[0])
+        temperature = float(resp_components[1])
+        e_c = float(resp_components[2])
         
 
         return [
