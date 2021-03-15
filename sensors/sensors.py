@@ -334,7 +334,7 @@ class TEROS12(Sensor):
 
         # Poll the Nano for when the reponse is ready
         response_ready = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_POLL, 1)
-        while (response_ready[0] is not 0x01):
+        while (response_ready[0] is not 0x0F):
             response_ready = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.SDI12_POLL, 1)
             time.sleep(0.01)
 
