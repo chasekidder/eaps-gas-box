@@ -180,6 +180,8 @@ void requestEvent(){
                 Wire.write(0x04);
             }
             else {
+                Serial.println(SDI12_data_ready);
+                Serial.println(SDI12_data_requested);
                 Wire.write(0x05);
             }
             
