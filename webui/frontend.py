@@ -21,14 +21,7 @@ app.register_blueprint(ui_routes)
 #app.register_blueprint(sensor_routes)
 
 
-# Load the config file based on if we're testing
-if "pytest" in sys.modules:
-    app.config.from_object("config.TestConfiguration")
-    app.template_folder = "../ui/templates/"
-    app.static_folder = "../ui/static/"
-
-else:
-    app.config.from_object('config.DevConfiguration')
+app.config.from_object('webui.config.DevConfiguration')
 
 # Create database
 #db = SQLAlchemy(app)
