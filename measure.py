@@ -13,20 +13,22 @@ CONFIG = None
 
 DB = db_utils.Database()
 
+# Initialize Sensors
+SENSORS = {
+    "gas pressure": sensor.ABPxx(),
+    "teros12": sensor.TEROS12(0),
+    "oxygen": sensor.LOX02F(),
+    "altitude": sensor.MPL3115A2(),
+    "pressure":sensor.ABPxx(),
+    "mass flow":sensor.AWM3300V(),
+    "co2":sensor.GMP251(),
+
+}
+
 @celery.task(name="measurement.cycle")
 def measurement_cycle():
 
-    # Initialize Sensors
-    SENSORS = {
-        "gas pressure": sensor.ABPxx(),
-        "teros12": sensor.TEROS12(0),
-        "oxygen": sensor.LOX02F(),
-        "altitude": sensor.MPL3115A2(),
-        "pressure":sensor.ABPxx(),
-        "mass flow":sensor.AWM3300V(),
-        "co2":sensor.GMP251(),
-
-    }
+    
 
     setup()
     i = 0
