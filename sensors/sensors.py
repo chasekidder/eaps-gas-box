@@ -158,11 +158,9 @@ class LOX02F(Sensor):
             raise ValueError
 
         response = ''.join([chr(x) for x in value]).strip()
-        print(response)
         resp_components = re.split("([O] \d*.\d*)", response)
-        print(resp_components)
 
-        return resp_components[0]
+        return resp_components[1]
 
     def read_oxygen_percent(self) -> float:
         command_string = "%\r\n"
@@ -181,10 +179,10 @@ class LOX02F(Sensor):
             print("0x0F response!")
             raise ValueError
 
-        response = ''.join([chr(x) for x in value])
+        response = ''.join([chr(x) for x in value]).strip()
         resp_components = re.split("([%] \d*.\d*)", response)
 
-        return resp_components[0]
+        return resp_components[1]
 
     def read_oxygen_temperature(self) -> float:
         command_string = "T\r\n"
@@ -203,10 +201,10 @@ class LOX02F(Sensor):
             print("0x0F response!")
             raise ValueError
 
-        response = ''.join([chr(x) for x in value])
+        response = ''.join([chr(x) for x in value]).strip()
         resp_components = re.split("([T] \d*.\d*)", response)
 
-        return resp_components[0]
+        return resp_components[1]
 
     def read_oxygen_pressure(self) -> float:
         command_string = "P\r\n"
@@ -225,10 +223,10 @@ class LOX02F(Sensor):
             print("0x0F response!")
             raise ValueError
 
-        response = ''.join([chr(x) for x in value])
+        response = ''.join([chr(x) for x in value]).strip()
         resp_components = re.split("([P] \d*.\d*)", response)
 
-        return resp_components[0]
+        return resp_components[1]
 
 
 class MPL3115A2(Sensor):
