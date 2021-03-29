@@ -9,7 +9,7 @@ from flask import jsonify
 
 from webui import utils
 from webui.ui.forms import CycleConfigForm
-from measure import measurement_cycle
+import measure
 import celery
 # from app.measurement.measure import celery, start_cycle
 
@@ -27,7 +27,7 @@ def config():
         }
 
 
-        task = measurement_cycle.delay()
+        task = measure.measurement_cycle.delay()
         async_result = celery.AsyncResult(id=task.task_id, app=celery)
 
         
