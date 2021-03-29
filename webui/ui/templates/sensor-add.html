@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+Home
+{% endblock %}
+{% block body %}
+<html>
+    <head>
+        <title>Add New Sensor Page</title>
+    </head>
+    <body>
+        <div class="container">
+            <form action="/sensor/add/" method="POST">
+                <div class="form-group">
+                    <label for="name">Sensor Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="GMP251">
+                </div>
+                <div class="form-group">
+                    <label for="address">Sensor Address</label>
+                    <input type="integer" class="form-control" id="address" name="address" placeholder="0x15">
+                    <label for="data_types">Type of Data Collected</label>
+                    <input type="text" class="form-control" id="data_types" name="data_types" placeholder="co2_concentration">
+                </div>
+                <button type="submit" class="btn btn-primary">Save Sensor</button>
+                {{ form.csrf_token }}
+            </form>
+
+            
+        </div>
+    </body>
+</html>
+{% endblock %}

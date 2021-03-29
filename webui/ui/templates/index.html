@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}
+Dashboard
+{% endblock %}
+{% block body %}
+<div class="container-fluid text-center">
+    <h1>Welcome to the Dashboard</h1>
+    <div class="container justify-content-center">
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary btn-lg" onclick="location.href='/config/';">Configure a New Measurement</button>
+        </div>
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary btn-lg" onclick="location.href='/live/';">View the Live Data</button>
+        </div>
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary btn-lg" onclick="location.href='/data/';">Download Data Remotely</button>
+        </div>
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary btn-lg" onclick="location.href='/sensor/add/';">Add Sensor</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
