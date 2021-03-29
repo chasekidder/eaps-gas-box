@@ -158,7 +158,7 @@ class LOX02F(Sensor):
             raise ValueError
 
         response = ''.join([chr(x) for x in value])
-        resp_components = re.split("[O] \d*.\d*", response)
+        resp_components = re.split("([O] \d*.\d*)", response)
 
         return resp_components[0]
 
@@ -180,7 +180,7 @@ class LOX02F(Sensor):
             raise ValueError
 
         response = ''.join([chr(x) for x in value])
-        resp_components = re.split("[%] \d*.\d*", response)
+        resp_components = re.split("([%] \d*.\d*)", response)
 
         return resp_components[0]
 
@@ -202,7 +202,7 @@ class LOX02F(Sensor):
             raise ValueError
 
         response = ''.join([chr(x) for x in value])
-        resp_components = re.split("[T] \d*.\d*", response)
+        resp_components = re.split("([T] \d*.\d*)", response)
 
         return resp_components[0]
 
@@ -224,7 +224,7 @@ class LOX02F(Sensor):
             raise ValueError
 
         response = ''.join([chr(x) for x in value])
-        resp_components = re.split("[P] \d*.\d*", response)
+        resp_components = re.split("([P] \d*.\d*)", response)
 
         return resp_components[0]
 
