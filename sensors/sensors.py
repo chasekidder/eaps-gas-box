@@ -118,13 +118,15 @@ class LOX02F(Sensor):
 
     def read_all(self) -> dict:
 
+        # O 0197.4 T +21.2 P 1002 % 019.70 e 0000
+
         response = self.read_oxygen()
         response = ''.join([chr(x) for x in response])
         #print("Oxygen Concentration:" + str(response))
 
 
-        resp_components = re.split("[+-][\d\.]+", response)
-        print(resp_components)
+        #resp_components = re.split("[+-][\d\.]+", response)
+        print(response.split())
 
         return [
             # {
