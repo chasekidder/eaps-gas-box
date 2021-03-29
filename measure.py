@@ -4,7 +4,7 @@ from config import Config
 
 from sensors.sensors import NANO
 
-from celery import Celery
+from webui.ui.measure_routes import celery
 #celery = Celery(broker="redis://localhost:6379/0")
 
 
