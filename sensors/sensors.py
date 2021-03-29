@@ -118,24 +118,30 @@ class LOX02F(Sensor):
 
     def read_all(self) -> dict:
 
-
-        response = self.read_oxygen_partial_pressure()
-        
-
-
-
         return [
-            # {
-            #     "timestamp": time.time(),
-            #     "type": "pp02",
-            #     "value": o2_pressure,
-            #     "unit": "mbar",
-            # },
+            {
+                "timestamp": time.time(),
+                "type": "oxygen partial pressure",
+                "value": self.read_oxygen_partial_pressure(),
+                "unit": "mbar",
+            },
             {
                 "timestamp": time.time(),
                 "type": "oxygen concentration",
-                "value": response,
+                "value": self.read_oxygen_percent(),
                 "unit": "percent",
+            },
+            {
+                "timestamp": time.time(),
+                "type": "oxygen pressure",
+                "value": self.read_oxygen_pressure(),
+                "unit": "mbar",
+            },
+            {
+                "timestamp": time.time(),
+                "type": "oxygen temperature",
+                "value": self.read_oxygen_temperature(),
+                "unit": "celcius",
             },
         ]
        
