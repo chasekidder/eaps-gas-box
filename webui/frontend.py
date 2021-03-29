@@ -1,5 +1,5 @@
 from flask import Flask
-from ..webui.ui.views import ui_routes
+from webui.ui.views import ui_routes
 #from webui.database.views import db_routes
 #from app.sensors.views import sensor_routes
 
