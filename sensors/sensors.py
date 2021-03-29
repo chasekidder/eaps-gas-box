@@ -160,6 +160,7 @@ class LOX02F(Sensor):
         response = ''.join([chr(x) for x in value])
         print(response)
         resp_components = re.split("([O] \d*.\d*)", response)
+        print(resp_components)
 
         return resp_components[0]
 
