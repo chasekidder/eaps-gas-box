@@ -116,6 +116,12 @@ void loop() {
         querySDI12();
     }
 
+    // Sample the O2 sensor
+    if (!UART1_data_ready && UART1_data_requested) {
+        UART1.print(command);
+        UART1_data_requested = 0;
+    }
+
     // May not need this at all
     delay(0.01);
 

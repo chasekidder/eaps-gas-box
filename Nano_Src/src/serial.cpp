@@ -26,12 +26,11 @@ void readUART1() {
         UART1_data[UART1_i] = c;
         UART1_i++;
         UART1_receiving = 1;
-        UART1_data_requested = 0;
 
         if(c == '\r'){
             UART1_data[UART1_i] = '\0';
             UART1_i = 0;
-            UART1_data_ready = 1;
+            if(UART1_data_requested) UART1_data_ready = 1;
             UART1_receiving = 0;
             Serial.println("Response Recieved!");
             Serial.println(UART1_data);

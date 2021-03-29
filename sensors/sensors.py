@@ -115,36 +115,16 @@ class LOX02F(Sensor):
     def __init__(self):
         self.bus = smbus2.SMBus(1)
         time.sleep(0.01)
-        #self.__initialize_sensor()
-
-    def __initialize_sensor(self):
-
-        # Configure to oneshot serial measurement mode
-        command_string = "M 1\r\n"
-        command_bytes = [ord(c) for c in command_string] 
-
-        # Send command to Nano cmd register
-        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
-
-        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_INIT, 1)
-        while (value[0] == 0x01):
-            value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_INIT, 1)
-            time.sleep(0.1)
-        pass
-
 
     def read_all(self) -> dict:
-        # o2_pressure = self.read_oxygen_pressure()
-        # o2_pressure = ''.join([chr(x) for x in o2_pressure])
-        # print("Oxygen Pressure:" + str(o2_pressure))
+
+        response = self.read_oxygen()
+        response = ''.join([chr(x) for x in response])
+        #print("Oxygen Concentration:" + str(response))
 
 
-        o2_concentration = self.read_oxygen_percent()
-        o2_concentration = ''.join([chr(x) for x in o2_concentration])
-        print("Oxygen Concentration:" + str(o2_concentration))
-
-
-        #resp_components = re.split("[+-][\d\.]+", response)
+        resp_components = re.split("[+-][\d\.]+", response)
+        print(resp_components)
 
         return [
             # {
@@ -156,33 +136,14 @@ class LOX02F(Sensor):
             {
                 "timestamp": time.time(),
                 "type": "oxygen concentration",
-                "value": o2_concentration,
+                "value": response,
                 "unit": "percent",
             },
         ]
        
 
-    def read_oxygen_pressure(self) -> float:
-        command_string = "O\r\n"
-        command_bytes = [ord(c) for c in command_string] 
-        
-        # Send command to Nano cmd register
-        self.bus.write_i2c_block_data(NANO_I2C_ADDR, NANO.CMD_REG_WRITE, command_bytes)
-
-        value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
-        while (value[0] == 0x0F):
-            value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
-            time.sleep(0.1)
-        print(value)
-
-        if (value[0] == 0x0F):
-            print("0x0F response!")
-            raise ValueError
-
-        return value
-
-    def read_oxygen_percent(self) -> float:
-        command_string = "P\r\n"
+    def read_oxygen(self) -> float:
+        command_string = "A\r\n"
         command_bytes = [ord(c) for c in command_string] 
         
         # Send command to Nano cmd register
