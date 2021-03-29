@@ -1,5 +1,5 @@
 from celery import Celery
 
-task_queue = Celery(broker='amqp://localhost')
+task_queue = Celery("proj", broker='amqp://localhost', include=['proj.tasks'])
 
 
