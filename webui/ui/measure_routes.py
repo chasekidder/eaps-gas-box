@@ -28,8 +28,9 @@ def config():
         }
 
 
-        task = measurement_cycle.delay()
-        async_result = task_queue.AsyncResult(id=task.task_id, app=task_queue)
+        #task = measurement_cycle.delay()
+        #async_result = task_queue.AsyncResult(id=task.task_id, app=task_queue)
+        measurement_cycle()
 
         
         flash("Success! Configuration sent to box. Measurements Starting...", "alert-success")
