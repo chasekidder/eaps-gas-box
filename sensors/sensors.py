@@ -159,7 +159,7 @@ class LOX02F(Sensor):
 
         response = ''.join([chr(x) for x in value]).strip()
         resp_components = re.split("([O] \d*.\d*)", response)
-        val = resp_components[1].split()
+        val = resp_components[1].split()[1]
 
         return val
 
@@ -182,7 +182,7 @@ class LOX02F(Sensor):
 
         response = ''.join([chr(x) for x in value]).strip()
         resp_components = re.split("([%] \d*.\d*)", response)
-        val = resp_components[1].split()
+        val = resp_components[1].split()[1]
 
         return val
 
@@ -205,7 +205,7 @@ class LOX02F(Sensor):
 
         response = ''.join([chr(x) for x in value]).strip()
         resp_components = re.split("([T] \d*.\d*)", response)
-        val = resp_components[1].split()
+        val = resp_components[1].split()[1]
 
         return val
 
@@ -228,7 +228,7 @@ class LOX02F(Sensor):
 
         response = ''.join([chr(x) for x in value]).strip()
         resp_components = re.split("([P] \d*.\d*)", response)
-        val = resp_components[1].split()
+        val = resp_components[1].split()[1]
 
         return val
 
