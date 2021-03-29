@@ -1,6 +1,7 @@
 from flask import Flask
-from webui.ui.views import ui_routes
-#from webui.database.views import db_routes
+from webui.ui.home_routes import home_routes
+from webui.ui.measure_routes import measure_routes
+#from app.database.views import db_routes
 #from app.sensors.views import sensor_routes
 
 import sys
@@ -16,8 +17,8 @@ app = Flask(__name__,
             )
 
 # Register routes
-app.register_blueprint(ui_routes)
-#app.register_blueprint(db_routes)
+app.register_blueprint(home_routes)
+app.register_blueprint(measure_routes)
 #app.register_blueprint(sensor_routes)
 
 
