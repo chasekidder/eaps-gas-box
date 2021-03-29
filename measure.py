@@ -5,7 +5,8 @@ from config import Config
 from sensors.sensors import NANO
 
 from celery import Celery
-celery = Celery(broker="redis://localhost:6379/0")
+#celery = Celery(broker="redis://localhost:6379/0")
+celery = Celery(broker="ampqp://localhost")
 
 import time
 
