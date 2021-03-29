@@ -151,14 +151,15 @@ class LOX02F(Sensor):
         while (value[0] == 0x0F):
             value = self.bus.read_i2c_block_data(NANO_I2C_ADDR, NANO.UART1_READ, 32)
             time.sleep(0.1)
-        print(value)
+    
 
         if (value[0] == 0x0F):
             print("0x0F response!")
             raise ValueError
 
         response = ''.join([chr(x) for x in value])
-        resp_components = re.split("([O] \d*.\d*)", response.strip())
+        print(response)
+        resp_components = re.split("([O] \d*.\d*)", response)
 
         return resp_components[0]
 
