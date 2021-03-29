@@ -4,23 +4,37 @@ from config import Config
 
 from sensors.sensors import NANO
 
+from celery import Celery
+celery = Celery(broker="redis://localhost:6379/0")
+
 import time
 
 CONFIG = None
 
 DB = db_utils.Database()
 
-# Initialize Sensors
-SENSORS = {
-    "gas pressure": sensor.ABPxx(),
-    "teros12": sensor.TEROS12(0),
-    "oxygen": sensor.LOX02F(),
-    "altitude": sensor.MPL3115A2(),
-    "pressure":sensor.ABPxx(),
-    "mass flow":sensor.AWM3300V(),
-    "co2":sensor.GMP251(),
+@celery.task(name="measurement.cycle")
+def measurement_cycle():
 
-}
+    # Initialize Sensors
+    SENSORS = {
+        "gas pressure": sensor.ABPxx(),
+        "teros12": sensor.TEROS12(0),
+        "oxygen": sensor.LOX02F(),
+        "altitude": sensor.MPL3115A2(),
+        "pressure":sensor.ABPxx(),
+        "mass flow":sensor.AWM3300V(),
+        "co2":sensor.GMP251(),
+
+    }
+
+    setup()
+    i = 0
+    while (i < 1):
+        loop()
+        i = i + 1
+    clean_up()
+    
 
 def setup():
     # Open Comms
