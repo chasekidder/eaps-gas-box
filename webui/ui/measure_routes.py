@@ -9,6 +9,7 @@ from flask import jsonify
 
 from webui import utils
 from webui.ui.forms import CycleConfigForm
+import measure
 # from app.measurement.measure import celery, start_cycle
 
 
@@ -22,20 +23,18 @@ def config():
         config = {
             "sample_frequency": form.frequency.data,
             "duration": form.duration.data,
-            "sensor_metadata": {
-                0: "MPL3115A2",
-                1: "TEROS12",
-                2: "AWM3300V",
-                3: "ABPxxx",
-                4: "LOX02F",
-                5: "GMP251",
-            }
         }
+
 
         #task = start_cycle.delay(config)
         #async_result = celery.AsyncResult(id=task.task_id, app=celery)
 
-        # LAUNCH main here!!!!!!!!!!!!!!!!
+        measure.setup()
+        i = 0
+        while (i < 1):
+            measure.loop()
+            i = i + 1
+        measure.clean_up()
         
         flash("Success! Configuration sent to box. Measurements Starting...", "alert-success")
         return redirect("/live/")
