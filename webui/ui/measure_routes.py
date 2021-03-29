@@ -10,9 +10,9 @@ from flask import jsonify
 from webui import utils
 from webui.ui.forms import CycleConfigForm
 import measure
-import celery
-# from app.measurement.measure import celery, start_cycle
-celery = celery.Celery(broker="amqp://localhost")
+
+from measure import task_queue, measurement_cycle
+
 
 
 measure_routes = Blueprint("measure_routes", __name__)
@@ -28,8 +28,8 @@ def config():
         }
 
 
-        task = measure.measurement_cycle.delay()
-        async_result = celery.AsyncResult(id=task.task_id, app=celery)
+        task = measurement_cycle.delay()
+        async_result = task_queue.AsyncResult(id=task.task_id, app=task_queue)
 
         
         flash("Success! Configuration sent to box. Measurements Starting...", "alert-success")

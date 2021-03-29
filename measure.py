@@ -4,7 +4,7 @@ from config import Config
 
 from sensors.sensors import NANO
 
-from webui.ui.measure_routes import celery
+from webui.celery import task_queue
 #celery = Celery(broker="redis://localhost:6379/0")
 
 
@@ -26,7 +26,7 @@ SENSORS = {
 
 }
 
-@celery.task(name="measurement.cycle")
+@task_queue.task(name="measurement.cycle")
 def measurement_cycle():
     setup()
     i = 0
