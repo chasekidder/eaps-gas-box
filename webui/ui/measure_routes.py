@@ -30,7 +30,12 @@ def config():
 
         #task = measurement_cycle.delay()
         #async_result = task_queue.AsyncResult(id=task.task_id, app=task_queue)
-        measurement_cycle()
+        measure.setup()
+        i = 0
+        while (i < 1):
+            measure.loop()
+            i = i + 1
+        measure.clean_up()
 
         
         flash("Success! Configuration sent to box. Measurements Starting...", "alert-success")
