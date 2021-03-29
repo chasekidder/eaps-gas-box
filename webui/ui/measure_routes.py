@@ -12,6 +12,7 @@ from webui.ui.forms import CycleConfigForm
 import measure
 import celery
 # from app.measurement.measure import celery, start_cycle
+celery = celery.Celery(broker="amqp://localhost")
 
 
 measure_routes = Blueprint("measure_routes", __name__)
