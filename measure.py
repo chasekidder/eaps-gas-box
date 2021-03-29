@@ -27,9 +27,6 @@ SENSORS = {
 
 @celery.task(name="measurement.cycle")
 def measurement_cycle():
-
-    
-
     setup()
     i = 0
     while (i < 1):

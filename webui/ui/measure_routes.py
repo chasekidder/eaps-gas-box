@@ -27,7 +27,7 @@ def config():
         }
 
 
-        task = measurement_cycle.delay(config)
+        task = measurement_cycle.delay()
         async_result = celery.AsyncResult(id=task.task_id, app=celery)
 
         
